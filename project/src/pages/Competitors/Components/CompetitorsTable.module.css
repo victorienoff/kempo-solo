@@ -1,0 +1,94 @@
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+.addButton {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.btnAdd {
+    background-color:  #093a5e;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
+}
+
+.btnAction {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btnEdit, .btnDelete {
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.btnEdit {
+    background-color: #ffc107;
+    color: white;
+}
+
+.btnDelete {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+.addBtn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-left: auto;
+  }
+  
+  .addBtn:hover {
+    background-color: #0056b3;
+  }
+  
+  .filterAndAdd {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  
+@media (max-width: 768px) {
+    .tableContainer {
+        overflow-x: auto;
+    }
+}

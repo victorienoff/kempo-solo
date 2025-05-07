@@ -1,6 +1,5 @@
-import Filters from "./components/Filters";
-import TournoiTable from "./components/TournoiTable";
 import styles from "./home.module.css"
+import TournoiTable from "./components/TournamentTable";
 
 function Home(){
     return(

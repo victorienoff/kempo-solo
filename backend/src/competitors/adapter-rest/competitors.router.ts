@@ -4,11 +4,38 @@ import { Category } from "../../entities/Category.entity.ts";
 import { Competitor } from "../../entities/Competitor.entity.ts";
 import { CompetitorsRoutes } from "./competitors.openapi.ts";
 import type { FilterQuery } from "@mikro-orm/core";
+import { decode } from "hono/jwt";
 
 export function buildCompetitorsRouter() {
     const router = getApp()
 
-    return router.openapi(CompetitorsRoutes.get, async (ctx) => {
+    return router.openapi(CompetitorsRoutes.getProfile, async (ctx) => {
+        const token = ctx.get("authtoken")
+        const payload = decode(token)
+        console.log(payload)
+        if (payload == null) {
+            return ctx.text("Unauthorized", 401)
+        }
+        const em = ctx.get("em")    
+        const result = await em.findOne(Competitor, { id: payload.payload.id as string })
+        if (result == null) {
+            return ctx.text("Not found", 404);
+        }
+        return ctx.json({
+            id: result.id,
+            firstname: result.firstname,
+            lastname: result.lastname,
+            birthday: result.birthday,
+            club: result.club,
+            country: result.country,
+            weight: result.weight,
+            rank: result.rank,
+            gender: result.gender,
+            email: result.email,
+        },200)
+    })
+    
+    .openapi(CompetitorsRoutes.get, async (ctx) => {
 
         const { id } = ctx.req.valid('param')
         const em = ctx.get("em");
@@ -35,7 +62,11 @@ export function buildCompetitorsRouter() {
             const body = ctx.req.valid("json")
 
             const em = ctx.get("em");
-            const result = em.create(Competitor, body)
+            const result = em.create(Competitor, {
+                ...body,
+                email:  "default@example.com", 
+                password:  "defaultPassword" 
+            })
 
             const oui = await em.persistAndFlush(result);
 
@@ -129,4 +160,6 @@ export function buildCompetitorsRouter() {
             const competitors = await em.find(Competitor, {}, { populate: ['rank'] })
             return ctx.json(competitors, 200)
         })
+        
+            
 }

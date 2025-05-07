@@ -20,7 +20,15 @@ export const CompetitorSchemaCreate = CompetitorSchema.omit({id : true})
 
 export const CompetitorSchemaUpdate = CompetitorSchema.omit({id : true}).partial()
 
+export const UserSchemaCreate = CompetitorSchemaCreate.merge(z.object({
+        email : z.string().email(),
+        password : z.string().min(8).max(20)}))
+    
+export const UserWithoutPassword = CompetitorSchemaCreate.merge(z.object({
+        email : z.string().email()}))
+
 
 export type Competitor = z.infer<typeof CompetitorSchema>
 export type CompetitorCreate = z.infer<typeof CompetitorSchemaCreate>
 export type CompetitorUpdate = z.infer<typeof CompetitorSchemaUpdate>
+export type UserCreate = z.infer<typeof UserSchemaCreate>

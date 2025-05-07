@@ -1,0 +1,96 @@
+/* Table Container */
+.table-container {
+  width: 100%;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+/* Table Styling */
+.tournament-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+/* Table Header */
+.tournament-table thead {
+  background: #2c3e50;
+  color: white;
+}
+
+.tournament-table th {
+  padding: 12px;
+  font-size: 16px;
+}
+
+/* Table Rows */
+.tournament-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.tournament-table td {
+  padding: 12px;
+}
+
+/* Alternate Row Background */
+.tournament-table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Button Styling - Voir Détails */
+.details-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.details-btn:hover {
+  background: #0056b3;
+}
+
+/* Modifier Button */
+.edit-btn {
+  background: #28a745; /* Green */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.edit-btn:hover {
+  background: #218838;
+}
+
+/* Supprimer Button */
+.delete-btn {
+  background: #dc3545; /* Red */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+
+/* Action Buttons Layout */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}

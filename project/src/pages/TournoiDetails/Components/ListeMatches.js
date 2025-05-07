@@ -8,7 +8,7 @@ const MatchTable = ({ matches = [] }) => {
 
   return (
     <div>
-      <h2>⚔️ Liste des matchs :</h2>
+      <h2>⚔️ Liste des competiteurs :</h2>
       <table className={styles.matchTable}>
         <thead>
           <tr>

@@ -1,7 +1,12 @@
 import styles from "./Filters.module.css";
-import CreationTournoi from './CreationTournoi';
+import CreationTournoi from './CreateTournament';
 
-const Filters = ({ searchQuery, setSearchQuery, selectedDate, setSelectedDate, selectedCategory, setSelectedCategory }) => {
+const Filters = ({
+  searchQuery,
+  setSearchQuery,
+  selectedDate,
+  setSelectedDate,
+}) => {
   return (
     <div className={styles.filtersContainer}>
       {/* 🔎 Search by Name */}
@@ -27,23 +32,9 @@ const Filters = ({ searchQuery, setSearchQuery, selectedDate, setSelectedDate, s
         />
       </div>
 
-      {/* 📊 Filter by Category */}
-      <div className={styles.filterItem}>
-        <label htmlFor="categoryFilter"><span>📊</span> Filtrer par catégorie :</label>
-        <select 
-          id="categoryFilter"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="">Toutes les catégories</option>
-          <option value="Hommes">Hommes</option>
-          <option value="Femmes">Femmes</option>
-        </select>
-      </div> 
-
       {/* ➕ Create Tournament Button */}
       <div className={styles.createBtn}>
-        <CreationTournoi/>
+        <CreationTournoi />
       </div>
     </div>
   );

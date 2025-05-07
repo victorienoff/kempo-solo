@@ -19,7 +19,7 @@ import { SeedManager } from '@mikro-orm/seeder';
 // } as Parameters<typeof MikroORM.init>[0];
 
 export default defineConfig({
-  dbName: 'kempo_db',
+  dbName: 'kempo_db_solo',
   user: 'root',
   password: 'secure-password',
   host: 'localhost',

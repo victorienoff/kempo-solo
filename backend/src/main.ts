@@ -7,6 +7,9 @@ import config from './mikro-orm.config.ts';
 import { Tournament } from './entities/Tournament.entity.ts';
 import { contextStorage } from 'hono/context-storage';
 import { cors } from 'hono/cors';
+import { logger } from "hono/logger";
+import { bearerAuth } from "hono/bearer-auth";
+import { verify } from "hono/jwt";
 
 
 
@@ -24,10 +27,33 @@ httpApp.use(async (c, next) => {
   await next()
 })
 
+httpApp.use(logger())
+
+httpApp.use(cors({
+  origin: '*',
+  allowHeaders: ['Content-Type', 'Authorization'],
+  exposeHeaders: ['Authorization'],
+}))
+
+
+httpApp.use('/api/*', bearerAuth({
+  verifyToken: async (token, ctx) => {
+    try {
+      const payload = await verify(token, process.env.JWT_SECRET || 'your-secret-key');
+      ctx.set("authtoken", token);
+      ctx.set("user", payload); 
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+}));
 
 
 
-httpApp.use(cors())
+
+
+
 
 const app = registerAppRoutes(httpApp)
 

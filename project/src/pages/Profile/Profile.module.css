@@ -1,0 +1,74 @@
+/* Simple profile page styles */
+.title {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 2rem;
+  color: #093a5e;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profileContainer {
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #f7faff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(9, 58, 94, 0.10);
+  padding: 36px 28px 24px 28px;
+  text-align: left;
+  border: 1.5px solid #e3eaf2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profileInfo {
+  margin-top: 24px;
+  font-size: 1.1rem;
+  line-height: 2.2;
+  color: #222;
+}
+
+.profileInfo input,
+.profileInfo select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #b5c7d3;
+  font-size: 1rem;
+  margin-left: 8px;
+  background: #fff;
+  color: #093a5e;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.editButton {
+  background: #1a237e;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+.editButton:hover {
+  background: #3949ab;
+  transform: translateY(-2px) scale(1.04);
+}
+
+@media (max-width: 600px) {
+  .profileContainer {
+    padding: 18px 4vw;
+    min-height: 100vh;
+  }
+  .profileInfo {
+    font-size: 1rem;
+  }
+}

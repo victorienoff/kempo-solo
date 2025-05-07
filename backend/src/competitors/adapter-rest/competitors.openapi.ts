@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { CompetitorSchema, CompetitorSchemaCreate, CompetitorSchemaUpdate } from "./competitors.schema.ts";
+import { CompetitorSchema, CompetitorSchemaCreate, CompetitorSchemaUpdate, UserWithoutPassword } from "./competitors.schema.ts";
 
 export const CompetitorsRoutes = {
     get: createRoute({
@@ -176,6 +176,41 @@ export const CompetitorsRoutes = {
             },
         }
     }),
+    getProfile: createRoute({
+        method: 'get',
+        path: '/me',
+        summary: 'Get my profile',
+        description: 'Get my profile',
+        responses: {
+            200: {
+                description: 'My profile',
+                content: {
+                    'application/json': {
+                        schema: UserWithoutPassword
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            404: {
+                description: 'Competitor not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            }
+        }
+    }),
+
+
+
 
     
 }

@@ -7,7 +7,8 @@ import mikroOrmConfig from "../mikro-orm.config.ts";
 
 export type AppEnv = {
     Variables: {
-      em: EntityManager
+      em: EntityManager,
+      authtoken: string
     }
   }
 
@@ -15,3 +16,4 @@ export function getApp() {
       const app = new OpenAPIHono<AppEnv>() ;
     return app
 }
+

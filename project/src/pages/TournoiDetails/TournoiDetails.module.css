@@ -1,0 +1,81 @@
+/* Ensure container fills full width without gray margin */
+.container {
+    padding: 2rem;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #ffffff; /* Remove gray */
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+  
+  /* Title styling */
+  h2 {
+    color: #112b5b;
+    font-size: 28px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  /* Button group */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .actions button {
+    padding: 0.6rem 1.2rem;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0052cc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .actions button:hover {
+    background-color: #003f99;
+  }
+  
+  /* Table layout */
+  .categoryTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .categoryTable th,
+  .categoryTable td {
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+  }
+  
+  .categoryTable th {
+    background-color: #112b5b;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .categoryTable td {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .categoryTable button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 4px;
+    background-color: #00a86b;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .categoryTable button:hover {
+    background-color: #007f52;
+  }
+  
