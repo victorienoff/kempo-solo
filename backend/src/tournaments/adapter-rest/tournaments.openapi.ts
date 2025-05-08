@@ -151,6 +151,7 @@ export const TournamentsRoutes = {
         tags: ['Tournaments'],
         summary: 'Get all tournaments',
         description: 'Get all tournaments',
+        security: [],
         request: {
             query: TournamentSchema
         },

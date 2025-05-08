@@ -14,10 +14,17 @@ const CompetitorTable = () => {
 
   const [selectedCompetitor, setSelectedCompetitor] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [ranks, setRanks] = useState([]);
 
   const fetchCompetitors = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/competitors");
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:3000/api/competitors", {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      });
       setCompetitors(res.data);
     } catch (error) {
       console.error("❌ Failed to fetch competitors:", error);
@@ -26,6 +33,10 @@ const CompetitorTable = () => {
 
   useEffect(() => {
     fetchCompetitors();
+    // Fetch ranks from API
+    axios.get("http://localhost:3000/api/ranks")
+      .then(res => setRanks(res.data))
+      .catch(() => setRanks([]));
   }, []);
 
   const handleAdd = (newCompetitor) => {
@@ -75,6 +86,7 @@ const CompetitorTable = () => {
         selectedGrade={selectedGrade}
         setSelectedGrade={setSelectedGrade}
         onOpenAddModal={() => setIsAddModalOpen(true)}
+        ranks={ranks}
       />
 
       <div className={styles.tableContainer}>
@@ -83,6 +95,7 @@ const CompetitorTable = () => {
             <tr>
               <th>👤 Nom</th>
               <th>🏆 Grade</th>
+              <th>🎭 Rôle</th>
               <th>📅 Date de Naissance</th>
               <th>⚖️ Poids</th>
               <th>⚙️ Actions</th>
@@ -94,6 +107,7 @@ const CompetitorTable = () => {
                 <tr key={c.id}>
                   <td>{c.firstname} {c.lastname}</td>
                   <td>{c.rank}</td>
+                  <td>{c.role || '-'}</td>
                   <td>{c.birthday ? new Date(c.birthday).toLocaleDateString() : "-"}</td>
                   <td>{c.weight ?? "-"}</td>
                   <td>
@@ -104,7 +118,7 @@ const CompetitorTable = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5">Aucun compétiteur trouvé.</td>
+                <td colSpan="6">Aucun compétiteur trouvé.</td>
               </tr>
             )}
           </tbody>

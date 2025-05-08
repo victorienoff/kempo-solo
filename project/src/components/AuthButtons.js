@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AuthButtons.module.css";
+import Profile from "../pages/Profile/Profile";
+import ProfileIcon from "./ProfileIcon";
 
 function AuthButtons() {
   const navigate = useNavigate();
@@ -19,7 +21,8 @@ function AuthButtons() {
           <button className={styles.btn} onClick={() => navigate("/login")}>Connexion</button>
         </>
       ) : (
-        <button className={styles.btn} onClick={handleLogout}>Déconnexion</button>
+        <><button className={styles.btn} onClick={handleLogout}>Déconnexion</button>
+        <ProfileIcon className={styles.profileIcon} onClick={() => navigate("/profile")} /></>
       )}
     </div>
   );

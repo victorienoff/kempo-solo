@@ -89,98 +89,142 @@ function Profile() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  if (loading) return <div className={styles.profileContainer}>Chargement du profil...</div>;
-  if (error) return <div className={styles.profileContainer}>{error}</div>;
+  const handleUnregister = async (tournamentId) => {
+    if (!user || !user.id) {
+      alert("Vous devez être connecté pour vous désinscrire.");
+      return;
+    }
+    const confirm = window.confirm("Voulez-vous vraiment vous désinscrire de ce tournoi ?");
+    if (!confirm) return;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/delete-competitor/${user.id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      });
+      if (response.ok) {
+        alert("Désinscription réussie !");
+        // Rafraîchir la liste des tournois
+        fetch("http://localhost:3000/api/tournaments/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => setMyTournaments(data))
+          .catch(() => setMyTournaments([]));
+      } else {
+        const data = await response.json();
+        alert(data.message || "Erreur lors de la désinscription.");
+      }
+    } catch (error) {
+      alert("Erreur réseau lors de la désinscription.");
+    }
+  };
+
+  if (loading) return <div className={styles.profilePage}><div className={styles.profileCard}>Chargement du profil...</div></div>;
+  if (error) return <div className={styles.profilePage}><div className={styles.profileCard}>{error}</div></div>;
 
   return (
-    <div className={styles.profileContainer}>
-      <AuthButtons />
-      <h2>Mon Profil</h2>
-      <div className={styles.profileInfo}>
-        {!editMode ? (
-          <>
-            <div><strong>Nom :</strong> {user?.lastname || "-"}</div>
-            <div><strong>Prénom :</strong> {user?.firstname || "-"}</div>
-            <div><strong>Date de naissance :</strong> {user?.birthday ? new Date(user.birthday).toLocaleDateString() : "-"}</div>
-            <div><strong>Club :</strong> {user?.club || "-"}</div>
-            <div><strong>Pays :</strong> {user?.country || "-"}</div>
-            <div><strong>Poids :</strong> {user?.weight !== undefined ? user.weight + " kg" : "-"}</div>
-            <div><strong>Grade :</strong> {user?.rank || "-"}</div>
-            <div><strong>Sexe :</strong> {user?.gender || "-"}</div>
-            <div><strong>Email :</strong> {user?.email || "-"}</div>
-          </>
-        ) : (
-          <>
-            <div><strong>Nom :</strong> <input name="lastname" value={formData?.lastname || ""} onChange={handleInputChange} /></div>
-            <div><strong>Prénom :</strong> <input name="firstname" value={formData?.firstname || ""} onChange={handleInputChange} /></div>
-            <div><strong>Date de naissance :</strong> <input type="date" name="birthday" value={formData?.birthday ? formData.birthday.slice(0,10) : ""} onChange={handleInputChange} /></div>
-            <div><strong>Club :</strong> <input name="club" value={formData?.club || ""} onChange={handleInputChange} /></div>
-            <div><strong>Pays :</strong> 
-              <select name="country" value={formData?.country || ""} onChange={handleInputChange}>
-                <option value="">Sélectionner</option>
-                {countries.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+    <div className={styles.profilePage}>
+      <div className={styles.profileCard}>
+        <h2 className={styles.profileTitle}>Mon Profil</h2>
+        <div className={styles.profileInfoGrid}>
+          {!editMode ? (
+            <>
+              <div><span className={styles.label}>Nom :</span> {user?.lastname || "-"}</div>
+              <div><span className={styles.label}>Prénom :</span> {user?.firstname || "-"}</div>
+              <div><span className={styles.label}>Date de naissance :</span> {user?.birthday ? new Date(user.birthday).toLocaleDateString() : "-"}</div>
+              <div><span className={styles.label}>Club :</span> {user?.club || "-"}</div>
+              <div><span className={styles.label}>Pays :</span> {user?.country || "-"}</div>
+              <div><span className={styles.label}>Poids :</span> {user?.weight !== undefined ? user.weight + " kg" : "-"}</div>
+              <div><span className={styles.label}>Grade :</span> {user?.rank || "-"}</div>
+              <div><span className={styles.label}>Sexe :</span> {user?.gender || "-"}</div>
+              <div><span className={styles.label}>Email :</span> {user?.email || "-"}</div>
+            </>
+          ) : (
+            <>
+              <div><span className={styles.label}>Nom :</span> <input name="lastname" value={formData?.lastname || ""} onChange={handleInputChange} /></div>
+              <div><span className={styles.label}>Prénom :</span> <input name="firstname" value={formData?.firstname || ""} onChange={handleInputChange} /></div>
+              <div><span className={styles.label}>Date de naissance :</span> <input type="date" name="birthday" value={formData?.birthday ? formData.birthday.slice(0,10) : ""} onChange={handleInputChange} /></div>
+              <div><span className={styles.label}>Club :</span> <input name="club" value={formData?.club || ""} onChange={handleInputChange} /></div>
+              <div><span className={styles.label}>Pays :</span> 
+                <select name="country" value={formData?.country || ""} onChange={handleInputChange}>
+                  <option value="">Sélectionner</option>
+                  {countries.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+              <div><span className={styles.label}>Poids :</span> <input type="number" name="weight" value={formData?.weight || ""} onChange={handleInputChange} /></div>
+              <div><span className={styles.label}>Grade :</span> 
+                <select name="rank" value={formData?.rank || ""} onChange={handleInputChange}>
+                  <option value="">Sélectionner</option>
+                  {ranks.map((r) => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </select>
+              </div>
+              <div><span className={styles.label}>Sexe :</span> 
+                <select name="gender" value={formData?.gender || ""} onChange={handleInputChange}>
+                  <option value="">Sélectionner</option>
+                  <option value="H">H</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+              <div><span className={styles.label}>Email :</span> <input name="email" value={formData?.email || ""} onChange={handleInputChange} /></div>
+            </>
+          )}
+        </div>
+        <div className={styles.buttonContainer}>
+          {editMode ? (
+            <button onClick={handleValidate} className={styles.editButton}>Valider</button>
+          ) : (
+            <button onClick={handleEditClick} className={styles.editButton}>Modifier</button>
+          )}
+        </div>
+        {myTournaments && myTournaments.length > 0 && (
+          <div className={styles.tournamentsSection}>
+            <h3>Mes tournois</h3>
+            <table className={styles.tournamentsTable}>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Date</th>
+                  <th>Lieu</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {myTournaments.map((t) => (
+                  <tr key={t.id}>
+                    <td>{t.name}</td>
+                    <td>{
+                      t.start_date && !isNaN(Date.parse(t.date))
+                        ? new Date(t.start_date).toLocaleDateString()
+                        : (t.start_date?.split("T")[0] || '-')
+                    }</td>
+                    <td>{t.city || '-'}</td>
+                    <td>
+                      <button
+                        className="register-btn-red"
+                        style={{background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', padding: '6px 12px', cursor: 'pointer'}}
+                        onClick={() => handleUnregister(t.id)}
+                      >
+                        Se désinscrire
+                      </button>
+                    </td>
+                  </tr>
                 ))}
-              </select>
-            </div>
-            <div><strong>Poids :</strong> <input type="number" name="weight" value={formData?.weight || ""} onChange={handleInputChange} /></div>
-            <div><strong>Grade :</strong> 
-              <select name="rank" value={formData?.rank || ""} onChange={handleInputChange}>
-                <option value="">Sélectionner</option>
-                {ranks.map((r) => (
-                  <option key={r} value={r}>{r}</option>
-                ))}
-              </select>
-            </div>
-            <div><strong>Sexe :</strong> 
-              <select name="gender" value={formData?.gender || ""} onChange={handleInputChange}>
-                <option value="">Sélectionner</option>
-                <option value="H">H</option>
-                <option value="F">F</option>
-              </select>
-            </div>
-            <div><strong>Email :</strong> <input name="email" value={formData?.email || ""} onChange={handleInputChange} /></div>
-          </>
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-      {/* Bouton Modifier/Valider avant la liste des tournois */}
-      {editMode ? (
-        <div className={styles.buttonContainer}>
-          <button onClick={handleValidate} className={styles.editButton}>Valider</button>
-        </div>
-      ) : (
-        <div className={styles.buttonContainer}>
-          <button onClick={handleEditClick} className={styles.editButton}>Modifier</button>
-        </div>
-      )}
-      {/* Tableau des tournois */}
-      {myTournaments && myTournaments.length > 0 && (
-        <div className={styles.tournamentsSection}>
-          <h3>Mes tournois</h3>
-          <table className={styles.tournamentsTable}>
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Date</th>
-                <th>Lieu</th>
-              </tr>
-            </thead>
-            <tbody>
-              {myTournaments.map((t) => (
-                <tr key={t.id}>
-                  <td>{t.name}</td>
-                  <td>{
-                    t.start_date && !isNaN(Date.parse(t.date))
-                      ? new Date(t.start_date).toLocaleDateString()
-                      : (t.start_date?.split("T")[0] || '-')
-                  }</td>
-                  <td>{t.city || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 }

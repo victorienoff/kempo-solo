@@ -5,6 +5,7 @@ a{
 }
 .sidebar {
     width: 15%;
+    min-width: 70px;
     height: 100vh;
     background-color: #0f1d33; /* Dark blue */
     color: white;
@@ -12,6 +13,7 @@ a{
     flex-direction: column;
     padding-top: 20px;
     position: relative;
+    transition: width 0.3s;
 }
   
   /* User Info */
@@ -40,6 +42,8 @@ a{
   }
   
   .menu li {
+    display: flex;
+    align-items: center;
     padding: 15px;
     cursor: pointer;
     transition: background 0.3s;
@@ -48,6 +52,35 @@ a{
   
   .menu li:hover {
     background-color: #1c2e4a;
+  }
+  
+  .icon {
+    font-size: 22px;
+    margin-right: 10px;
+  }
+  
+  @media (max-width: 900px) {
+    .icon {
+      margin-right: 0;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .sidebar {
+      width: 70px;
+      min-width: 70px;
+      padding-top: 10px;
+    }
+    .user-info {
+      display: none;
+    }
+    .linkText {
+      display: none;
+    }
+    .menu li {
+      justify-content: center;
+      padding: 15px 0;
+    }
   }
   
   /* Logout Button */

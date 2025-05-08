@@ -62,6 +62,35 @@ function Login() {
         />
         <button className={styles.loginButton} type="submit">Se connecter</button>
       </form>
+      <div style={{ marginTop: 16, textAlign: 'center' }}>
+        <button
+          type="button"
+          className={styles.forgotPasswordBtn}
+          style={{ background: 'none', border: 'none', color: '#1a237e', cursor: 'pointer', textDecoration: 'underline', padding: 0, fontSize: '1rem' }}
+          onClick={async () => {
+            if (!email) {
+              setError("Veuillez entrer votre email pour réinitialiser le mot de passe.");
+              return;
+            }
+            setError("");
+            try {
+              const response = await fetch(`http://localhost:3000/send/${encodeURIComponent(email)}`, {
+                method: "POST"
+              });
+              const data = await response.json();
+              if (!response.ok) {
+                setError(data.error || "Erreur lors de l'envoi de l'email.");
+              } else {
+                alert("Un email de réinitialisation a été envoyé si l'adresse existe.");
+              }
+            } catch (err) {
+              setError("Erreur réseau lors de l'envoi de l'email.");
+            }
+          }}
+        >
+          Mot de passe oublié ?
+        </button>
+      </div>
     </div>
   );
 }

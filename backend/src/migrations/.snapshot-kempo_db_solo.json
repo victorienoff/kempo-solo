@@ -196,17 +196,17 @@
         },
         "role": {
           "name": "role",
-          "type": "enum('admin','comptiteur','gestionnaire','visiteur')",
+          "type": "enum('Admin','Competiteur','Gestionnaire','Visiteur')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "default": "'comptiteur'",
+          "default": "'Competiteur'",
           "enumItems": [
-            "admin",
-            "comptiteur",
-            "gestionnaire",
-            "visiteur"
+            "Admin",
+            "Competiteur",
+            "Gestionnaire",
+            "Visiteur"
           ],
           "mappedType": "enum"
         }

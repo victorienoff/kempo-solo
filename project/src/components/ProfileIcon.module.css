@@ -1,6 +1,5 @@
 /* Simple style for the profile icon in the navbar */
 .profileIcon {
-  position: absolute;
   top: 18px;
   right: 18px;
   cursor: pointer;

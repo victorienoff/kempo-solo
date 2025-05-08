@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import style from "./nav.module.css";
-import ProfileIcon from "../ProfileIcon";
 
 const NavBar = () => {
     return (
@@ -9,17 +8,12 @@ const NavBar = () => {
             <div className={style["user-info"]}>
                 <img src="/logo.png" alt="Tournament Logo" className={style.logo} />
             </div>
-            <ProfileIcon />
-
             <ul className={style.menu}>
-                <Link to="/"><li>🏠 Home</li></Link>
-                <Link to="/tournaments"><li>🏆 Tournoi</li></Link>
-                {/* <li>📅 Tous les Tournois</li> */}
-                {/* <li>📊 Score Board</li> */}
-                <Link to="/competiteurs"><li>👥 Compétiteurs</li></Link>
-                <Link to="/telecommande"><li>🎚️ Telecommande</li></Link>
-                <Link to="/scoreboard"><li>📺 Scoarboard</li></Link>
-
+                <Link to="/"><li><span className={style.icon}>🏠</span><span className={style.linkText}>Home</span></li></Link>
+                <Link to="/tournaments"><li><span className={style.icon}>🏆</span><span className={style.linkText}>Tournoi</span></li></Link>
+                <Link to="/competiteurs"><li><span className={style.icon}>👥</span><span className={style.linkText}>Compétiteurs</span></li></Link>
+                <Link to="/telecommande"><li><span className={style.icon}>🎚️</span><span className={style.linkText}>Telecommande</span></li></Link>
+                <Link to="/scoreboard"><li><span className={style.icon}>📺</span><span className={style.linkText}>Scoarboard</span></li></Link>
             </ul>
         </div>
     );

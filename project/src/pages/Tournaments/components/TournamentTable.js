@@ -220,10 +220,12 @@ const TournoiTable = () => {
                       </button>
                     </>
                   )}
-                  <Link to={`/tournoiDetails/${comp.id}`}>
-                    <button className={styles["details-btn"]}>Voir Détails</button>
-                  </Link>
-                  {myTournaments.includes(comp.id) ? (
+                  {userRole && (
+                    <Link to={`/tournoiDetails/${comp.id}`}>
+                      <button className={styles["details-btn"]}>Voir Détails</button>
+                    </Link>
+                  )}
+                  {userRole && (myTournaments.includes(comp.id) ? (
                     <button
                       className={styles["register-btn-red"]}
                       onClick={() => handleUnregister(comp.id)}
@@ -237,7 +239,7 @@ const TournoiTable = () => {
                     >
                       S'inscrire
                     </button>
-                  )}
+                  ))}
                 </div>
               </div>
             ))

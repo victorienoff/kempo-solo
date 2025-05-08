@@ -36,18 +36,25 @@ httpApp.use(cors({
 }))
 
 
-httpApp.use('/api/*', bearerAuth({
-  verifyToken: async (token, ctx) => {
-    try {
-      const payload = await verify(token, process.env.JWT_SECRET || 'your-secret-key');
-      ctx.set("authtoken", token);
-      ctx.set("user", payload); 
-      return true;
-    } catch (e) {
-      return false;
-    }
-  },
-}));
+httpApp.use('/api/*', async (c, next) => {
+
+  if (c.req.method === 'GET' && (c.req.path === '/api/tournaments' ||c.req.path === '/api/ranks' )) {
+    await next();
+    return;
+  }
+  return bearerAuth({
+    verifyToken: async (token, ctx) => {
+      try {
+        const payload = await verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        ctx.set("authtoken", token);
+        ctx.set("user", payload); 
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+  })(c, next);
+});
 
 
 

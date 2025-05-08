@@ -9,6 +9,7 @@ const Filter = ({
   selectedGrade,
   setSelectedGrade,
   onOpenAddModal, // 👈 Receive the function to open modal
+  ranks = [],
 }) => {
   return (
     <div className={styles.filtersContainer}>
@@ -47,21 +48,16 @@ const Filter = ({
           onChange={(e) => setSelectedGrade(e.target.value)}
         >
           <option value="">Tous les grades</option>
-          <option value="Ceinture Blanche">Ceinture Blanche</option>
-          <option value="Ceinture Jaune">Ceinture Jaune</option>
-          <option value="Ceinture Orange">Ceinture Orange</option>
-          <option value="Ceinture Verte">Ceinture Verte</option>
-          <option value="Ceinture Bleue">Ceinture Bleue</option>
-          <option value="Ceinture Marron">Ceinture Marron</option>
-          <option value="Ceinture Noire">Ceinture Noire</option>
+          {ranks.map((rank) => (
+            <option key={rank} value={rank}>{rank}</option>
+          ))}
         </select>
       </div>
 
       <div className={styles.filterItem}>
-      <button className={styles.addButton} onClick={onOpenAddModal}>
-  <span>➕</span> Ajouter Compétiteur
-</button>
-
+        <button className={styles.addButton} onClick={onOpenAddModal}>
+          <span>➕</span> Ajouter Compétiteur
+        </button>
       </div>
     </div>
   );

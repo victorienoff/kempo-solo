@@ -5,10 +5,10 @@ import { EnumRank } from './Tournament.entity.ts';
 import { EnumGender } from './weight-category.ts';
 
 export enum EnumRole {
-    ADMIN = 'admin',
-    COMPETITOR = 'comptiteur',
-    GESTIONNAIRE = 'gestionnaire',
-    VISITOR = 'visiteur'
+    ADMIN = 'Admin',
+    COMPETITOR = 'Competiteur',
+    GESTIONNAIRE = 'Gestionnaire',
+    VISITOR = 'Visiteur'
 }
 export class Competitor{
     id!: string ;

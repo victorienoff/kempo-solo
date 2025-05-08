@@ -19,6 +19,7 @@
     "hono": "^4.7.5",
     "jsonwebtoken": "^9.0.2",
     "kenpo-backend": "file:",
+    "node-mailjet": "^6.0.8",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

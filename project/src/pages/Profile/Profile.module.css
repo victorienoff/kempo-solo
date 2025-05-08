@@ -7,68 +7,123 @@
   margin-bottom: 30px;
 }
 
-.profileContainer {
-  max-width: 420px;
-  margin: 0 auto;
+.profilePage {
   min-height: 100vh;
-  background: #f7faff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(9, 58, 94, 0.10);
-  padding: 36px 28px 24px 28px;
-  text-align: left;
-  border: 1.5px solid #e3eaf2;
+  background: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.profileCard {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(15,29,51,0.10), 0 1.5px 4px rgba(15,29,51,0.07);
+  padding: 36px 40px 32px 40px;
+  min-width: 340px;
+  max-width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 24px;
 }
 
-.profileInfo {
-  margin-top: 24px;
-  font-size: 1.1rem;
-  line-height: 2.2;
-  color: #222;
+.profileTitle {
+  text-align: center;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
 }
 
-.profileInfo input,
-.profileInfo select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #b5c7d3;
+.profileInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 24px;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-weight: 600;
+  color: #3949ab;
+  margin-right: 6px;
+}
+
+input, select {
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  padding: 5px 10px;
   font-size: 1rem;
-  margin-left: 8px;
-  background: #fff;
-  color: #093a5e;
+  background: #f7fafd;
+  margin-left: 4px;
+  outline: none;
+  transition: border 0.2s;
+}
+input:focus, select:focus {
+  border: 1.5px solid #1a237e;
 }
 
 .buttonContainer {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 32px;
+  justify-content: center;
+  margin-top: 8px;
 }
 
 .editButton {
-  background: #1a237e;
+  background: linear-gradient(90deg, #3949ab 0%, #1a237e 100%);
   color: #fff;
   border: none;
-  border-radius: 24px;
-  padding: 10px 32px;
-  font-size: 1.1rem;
+  border-radius: 20px;
+  padding: 9px 32px;
+  font-size: 1.08rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(26,35,126,0.08);
+  transition: background 0.2s, transform 0.1s;
 }
 .editButton:hover {
-  background: #3949ab;
-  transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(90deg, #5c6bc0 0%, #283593 100%);
+  transform: translateY(-2px) scale(1.03);
 }
 
+.tournamentsSection {
+  margin-top: 18px;
+}
+.tournamentsSection h3 {
+  text-align: center;
+  color: #1a237e;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.tournamentsTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+.tournamentsTable th {
+  background: #e8eaf6;
+  color: #1a237e;
+  font-weight: 700;
+  padding: 8px 0;
+  border-radius: 8px 8px 0 0;
+}
+.tournamentsTable td {
+  background: #f7fafd;
+  color: #222;
+  padding: 8px 0;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
+}
 @media (max-width: 600px) {
-  .profileContainer {
-    padding: 18px 4vw;
-    min-height: 100vh;
+  .profileCard {
+    padding: 18px 6px 18px 6px;
+    min-width: unset;
+    max-width: 98vw;
   }
-  .profileInfo {
-    font-size: 1rem;
+  .profileInfoGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }

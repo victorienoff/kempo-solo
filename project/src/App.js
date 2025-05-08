@@ -13,6 +13,7 @@ import Login from "./pages/Login/Login";
 import Profile from "./pages/Profile/Profile";
 import AuthButtons from "./components/AuthButtons";
 import Signup from "./pages/Signup/Signup";
+import PasswordReset from "./pages/PasswordReset/PasswordReset";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/login" element={<div className='content'><Login /></div>}></Route>
           <Route path="/profile" element={<div className='content'><Profile /></div>} />
           <Route path="/signup" element={<div className='content'><Signup /></div>} />
+          <Route path="/passwordreset/:token" element={<div className='content'><PasswordReset /></div>} />
         </Routes>
       </div>
     </Router>
