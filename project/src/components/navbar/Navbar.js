@@ -12,7 +12,8 @@ const NavBar = () => {
             <ProfileIcon />
 
             <ul className={style.menu}>
-                <Link to="/"><li>🏠 Accueil</li></Link>
+                <Link to="/"><li>🏠 Home</li></Link>
+                <Link to="/tournaments"><li>🏆 Tournoi</li></Link>
                 {/* <li>📅 Tous les Tournois</li> */}
                 {/* <li>📊 Score Board</li> */}
                 <Link to="/competiteurs"><li>👥 Compétiteurs</li></Link>

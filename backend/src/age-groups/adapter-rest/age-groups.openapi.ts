@@ -4,6 +4,7 @@ export const AgeGroupRoutes = {
     getAgeGroups: createRoute({
         method: 'get',
         path: '',
+        tags: ['Information'],
         summary: 'Get all age groups',
         description: 'Get all age groups',
         responses : {
@@ -25,6 +26,7 @@ export const AgeGroupRoutes = {
     getAgeGroupById: createRoute({
         method: 'get',
         path: '/{id}',
+        tags: ['Information'],
         summary: 'Get age group by id',
         description: 'Get age group by id',
         request: {

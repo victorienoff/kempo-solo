@@ -7,9 +7,36 @@ import { Match } from "../../entities/match.entity.ts";
 import { BracketMatchSchema, MatchSchema } from "../../matches/adapter-rest/matches.schema.ts";
 
 export const TournamentsRoutes = {
+    me: createRoute({
+        method: 'get',
+        path: '/me',
+        tags: ['Tournaments'],
+        summary: 'Get tournament of the user',
+        description: 'Get tournament of the user',
+        responses: {
+            200: {
+                description: 'Details of the tournament',
+                content: {
+                    'application/json': {
+                        schema: z.array(TournamentSchema)
+                    }
+                }
+            },
+            404: {
+                description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            }
+
+        }
+    }),
     get: createRoute({
         method: 'get',
         path: '/{id}',
+        tags: ['Tournaments'],
         summary: 'Get one tournament',
         description: 'Get one tournament by ID',
         request: {
@@ -41,6 +68,7 @@ export const TournamentsRoutes = {
     post: createRoute({
         method: 'post',
         path: '',
+        tags: ['Tournaments'],
         summary: 'Create one tournament',
         description: 'Create one tournament',
         request: {
@@ -78,6 +106,7 @@ export const TournamentsRoutes = {
     put: createRoute({
         method: 'put',
         path: '/{id}',
+        tags: ['Tournaments'],
         summary: 'Modify one tournament',
         description: 'Modify one tournament',
 
@@ -119,6 +148,7 @@ export const TournamentsRoutes = {
     list: createRoute({
         method: 'get',
         path: '',
+        tags: ['Tournaments'],
         summary: 'Get all tournaments',
         description: 'Get all tournaments',
         request: {
@@ -139,6 +169,7 @@ export const TournamentsRoutes = {
     delete: createRoute({
         method: 'delete',
         path: '/{id}',
+        tags: ['Tournaments'],
         summary: 'Delete one tournament',
         description: 'Delete one tournament by ID',
         request: {
@@ -169,6 +200,7 @@ export const TournamentsRoutes = {
     addCompetitor: createRoute({
         method: 'post',
         path: '/{id}/add-competitor/{competitorId}',
+        tags: ['Tournaments'],
         summary: 'Add one competitor on the tournament',
         description: 'Add one competitor on the tournament by competitor ID',
         request: {
@@ -209,6 +241,7 @@ export const TournamentsRoutes = {
     deleteCompetitor: createRoute({
         method: 'delete',
         path: '/{id}/delete-competitor/{idCompetitor}',
+        tags: ['Tournaments'],
         summary: 'Delete one competitor ',
         description: 'Delete one competitor on the tournament by competitor ID',
         request: {
@@ -249,6 +282,7 @@ export const TournamentsRoutes = {
     getCompetitors: createRoute({
         method: 'get',
         path: '/{id}/competitors',
+        tags: ['Tournaments'],
         summary: 'Get all competitors of a tournament',
         description: 'Get all competitors of a tournament',
         request: {
@@ -278,6 +312,7 @@ export const TournamentsRoutes = {
     createCategory: createRoute({
         method: 'post',
         path: '/{id}/categories',
+        tags: ['Tournaments'],
         summary: 'Create one category',
         description: 'Create one category',
         request: {
@@ -314,6 +349,7 @@ export const TournamentsRoutes = {
     deleteCategory: createRoute({
         method: 'delete',
         path: '/categories/{id}',
+        tags: ['Tournaments'],
         summary: 'Delete one category',
         description: 'Delete one category by ID',
         request: {
@@ -344,6 +380,7 @@ export const TournamentsRoutes = {
     modifyCategory: createRoute({
         method: 'put',
         path: '/categories/{id}',
+        tags: ['Tournaments'],
         summary: 'Modify one category',
         description: 'Modify one category',
         request: {
@@ -382,6 +419,7 @@ export const TournamentsRoutes = {
     listCategories: createRoute({
         method: 'get',
         path: '/{id}/categories',
+        tags: ['Tournaments'],
         summary: 'Get all categories',
         description: 'Get all categories of the tournament',
         request: {
@@ -411,6 +449,7 @@ export const TournamentsRoutes = {
     assignCompetitors: createRoute({
         method: 'post',
         path: '/{id}/assign-competitors',
+        tags: ['Tournaments'],
         summary: 'Assign competitors to a category',
         description: 'Assign competitors to a category',
         request: {
@@ -440,6 +479,7 @@ export const TournamentsRoutes = {
     assignCompetitor: createRoute({
         method: 'post',
         path: '/{id}/assign-competitor/{categoryId}',
+        tags: ['Categories'],
         summary: 'Assign one competitor to a category',
         description: 'Assign one competitor to a category',
         request: {
@@ -480,6 +520,7 @@ export const TournamentsRoutes = {
     getCategories: createRoute({
         method: 'get',
         path: '/{id}/categories',
+        tags: ['Categories'],
         summary: 'Get all categories',
         description: 'Get all categories of the tournament',
         request: {
@@ -509,6 +550,7 @@ export const TournamentsRoutes = {
     getCategoryCompetitors: createRoute({
         method: 'get',
         path: '/categories/{categoryId}/competitors',
+        tags: ['Categories'],
         summary: 'Get all competitors of a category',
         description: 'Get all competitors of a category',
         request: {
@@ -538,6 +580,7 @@ export const TournamentsRoutes = {
     startTournament: createRoute({
         method: 'post',
         path: '/{id}/start',
+        tags: ['Tournaments'],
         summary: 'Start the tournament',
         description: 'Start the tournament and create the matches',
         request: {
@@ -568,6 +611,7 @@ export const TournamentsRoutes = {
     startRankingPool: createRoute({
         method: 'post',
         path: '/categories/{id}/start-ranking-pool',
+        tags: ['Categories'],
         summary: 'Start ranking pool for a competitor',
         description: 'Start ranking pool for a competitor',
         request: {
@@ -597,6 +641,7 @@ export const TournamentsRoutes = {
     notfinishedMatches: createRoute({
         method: 'get',
         path: '/categories/{id}/not-finished-matches',
+        tags: ['Categories'],
         summary: 'Get all not finished matches',
         description: 'Get all not finished matches of the tournament',
         request: {
@@ -626,6 +671,7 @@ export const TournamentsRoutes = {
     getMatch: createRoute({
         method: 'get',
         path: '/matches/{id}',
+        tags: ['Matches'],
         summary: 'Get one match',
         description: 'Get one match by ID',
         request: {
@@ -656,6 +702,7 @@ export const TournamentsRoutes = {
     getMatches: createRoute({
         method: 'get',
         path: '/categories/{id}/matches',
+        tags: ['Matches'],
         summary: 'Get all matches of a category',
         description: 'Get all matches of a category',
         request: {
@@ -685,6 +732,7 @@ export const TournamentsRoutes = {
     getCategoryResults: createRoute({
         method: 'get',
         path: '/categories/{id}/results',
+        tags: ['Categories'],
         summary: 'Get results of a category',
         description: 'Get results of a category',
         request: {
@@ -718,6 +766,7 @@ export const TournamentsRoutes = {
     getBracket: createRoute({
         method: 'get',
         path: '/categories/{id}/bracket',
+        tags: ['Matches'],
         summary: 'Get bracket of a category',
         description: 'Get bracket of a category',
         request: {

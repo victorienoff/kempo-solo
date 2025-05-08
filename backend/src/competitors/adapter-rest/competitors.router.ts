@@ -1,7 +1,7 @@
 import type { Query } from "@mikro-orm/migrations";
 import { getApp } from "../../api/get-app.ts";
 import { Category } from "../../entities/Category.entity.ts";
-import { Competitor } from "../../entities/Competitor.entity.ts";
+import { Competitor, EnumRole } from "../../entities/Competitor.entity.ts";
 import { CompetitorsRoutes } from "./competitors.openapi.ts";
 import type { FilterQuery } from "@mikro-orm/core";
 import { decode } from "hono/jwt";
@@ -65,7 +65,8 @@ export function buildCompetitorsRouter() {
             const result = em.create(Competitor, {
                 ...body,
                 email:  "default@example.com", 
-                password:  "defaultPassword" 
+                password:  "defaultPassword",
+                role: EnumRole.COMPETITOR
             })
 
             const oui = await em.persistAndFlush(result);

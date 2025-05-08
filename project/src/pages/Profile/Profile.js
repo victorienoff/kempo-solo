@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AuthButtons from "../../components/AuthButtons";
 import styles from "./Profile.module.css";
 
 function Profile() {
@@ -8,6 +9,7 @@ function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(null);
   const [ranks, setRanks] = useState([]);
+  const [myTournaments, setMyTournaments] = useState([]);
 
   const countries = [
     "France", "Belgique", "Suisse", "Canada", "Luxembourg", "Algérie", "Maroc", "Tunisie", "Espagne", "Italie", "Allemagne", "Royaume-Uni", "États-Unis", "Portugal", "Pays-Bas", "Chine", "Japon", "Brésil", "Argentine", "Australie", "Inde", "Russie", "Turquie", "Grèce", "Pologne", "Suède", "Norvège", "Danemark", "Finlande", "Islande", "Irlande", "Autriche", "Hongrie", "Roumanie", "Bulgarie", "Croatie", "Serbie", "Slovaquie", "Slovénie", "Tchéquie", "Ukraine", "Lituanie", "Lettonie", "Estonie", "Chypre", "Malte", "Israël", "Égypte", "Afrique du Sud", "Mexique", "Colombie", "Chili", "Pérou", "Venezuela", "Corée du Sud", "Thaïlande", "Vietnam", "Indonésie", "Malaisie", "Singapour", "Nouvelle-Zélande", "Philippines", "Arabie Saoudite", "Émirats Arabes Unis", "Qatar", "Koweït", "Liban", "Pakistan", "Bangladesh", "Sri Lanka", "Cambodge", "Laos", "Birmanie", "Mongolie", "Kazakhstan", "Ouzbékistan", "Turkménistan", "Géorgie", "Arménie", "Azerbaïdjan", "Irak", "Iran", "Syrie", "Jordanie", "Yémen", "Oman", "Bahreïn", "Koweït", "Afghanistan", "Tadjikistan", "Kirghizistan", "Palestine", "Soudan", "Éthiopie", "Kenya", "Tanzanie", "Ouganda", "Rwanda", "Burundi", "Mozambique", "Angola", "Zimbabwe", "Botswana", "Namibie", "Zambie", "Ghana", "Nigéria", "Cameroun", "Sénégal", "Mali", "Burkina Faso", "Niger", "Tchad", "Côte d'Ivoire", "Guinée", "Bénin", "Togo", "Sierra Leone", "Libéria", "Gambie", "Cap-Vert", "Mauritanie", "Guinée-Bissau", "Congo", "RDC", "Gabon", "Congo-Brazzaville", "Centrafrique", "Guinée équatoriale", "Sao Tomé-et-Principe", "Madagascar", "Comores", "Seychelles", "Maurice", "Swaziland", "Lesotho", "Libye", "Maroc", "Algérie", "Tunisie", "Soudan du Sud"
@@ -45,6 +47,19 @@ function Profile() {
       .then((res) => res.json())
       .then((data) => setRanks(data))
       .catch(() => setRanks([]));
+
+    // Récupération des tournois auxquels je participe
+    if (token) {
+      fetch("http://localhost:3000/api/tournaments/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setMyTournaments(data))
+        .catch(() => setMyTournaments([]));
+    }
   }, []);
 
   const handleEditClick = () => {
@@ -79,6 +94,7 @@ function Profile() {
 
   return (
     <div className={styles.profileContainer}>
+      <AuthButtons />
       <h2>Mon Profil</h2>
       <div className={styles.profileInfo}>
         {!editMode ? (
@@ -127,6 +143,7 @@ function Profile() {
           </>
         )}
       </div>
+      {/* Bouton Modifier/Valider avant la liste des tournois */}
       {editMode ? (
         <div className={styles.buttonContainer}>
           <button onClick={handleValidate} className={styles.editButton}>Valider</button>
@@ -134,6 +151,34 @@ function Profile() {
       ) : (
         <div className={styles.buttonContainer}>
           <button onClick={handleEditClick} className={styles.editButton}>Modifier</button>
+        </div>
+      )}
+      {/* Tableau des tournois */}
+      {myTournaments && myTournaments.length > 0 && (
+        <div className={styles.tournamentsSection}>
+          <h3>Mes tournois</h3>
+          <table className={styles.tournamentsTable}>
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Lieu</th>
+              </tr>
+            </thead>
+            <tbody>
+              {myTournaments.map((t) => (
+                <tr key={t.id}>
+                  <td>{t.name}</td>
+                  <td>{
+                    t.start_date && !isNaN(Date.parse(t.date))
+                      ? new Date(t.start_date).toLocaleDateString()
+                      : (t.start_date?.split("T")[0] || '-')
+                  }</td>
+                  <td>{t.city || '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

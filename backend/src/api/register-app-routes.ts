@@ -12,11 +12,11 @@ import { buildLoginRouter } from "./login.ts";
 export const registerAppRoutes = (baseApp: OpenAPIHono<AppEnv>) => {
     let app = baseApp.route('/api/tournaments', buildTournamentsRouter())
     app = baseApp.route('', buildLoginRouter())
-    app = baseApp.route('/ranks',buildRanksRouter())
+    app = baseApp.route('/api/ranks',buildRanksRouter())
     app = baseApp.route('/api/competitors',buildCompetitorsRouter())
-    app = baseApp.route('/age-groups', buildAgeGroupsRouter())
-    app = baseApp.route('/weight-categories', buildWeightCategoriesRouter())
-    app = baseApp.route('/matches', buildMatchesRouter())
+    app = baseApp.route('/api/age-groups', buildAgeGroupsRouter())
+    app = baseApp.route('/api/weight-categories', buildWeightCategoriesRouter())
+    app = baseApp.route('/api/matches', buildMatchesRouter())
     
 
     

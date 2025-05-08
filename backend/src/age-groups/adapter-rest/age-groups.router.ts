@@ -13,7 +13,7 @@ export function buildAgeGroupsRouter() {
 
     .openapi(AgeGroupRoutes.getAgeGroupById, async (ctx) => {
         const { id } = ctx.req.valid('param')
-        const em = ctx.get("em");
+        const em = ctx.get("em")
         const result = await em.findOne(AgeGroup, { id })
         if (result == null) {
             return ctx.text("Not found", 404);

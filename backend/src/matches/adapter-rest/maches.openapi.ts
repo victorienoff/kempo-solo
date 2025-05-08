@@ -5,6 +5,7 @@ export const MatchesRoutes = {
     setResult: createRoute({
         method: 'post',
         path: '/{id}',
+        tags: ['Matches'],
         summary: 'Set the result of a match',
         description: 'Set the result of a match',
         request: {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthButtons from "../../components/AuthButtons";
 import styles from "./Login.module.css";
 
 function Login() {
@@ -37,6 +38,7 @@ function Login() {
 
   return (
     <div className={styles.loginContainer}>
+      <AuthButtons />
       <h1 className={styles.loginTitle}>Connexion</h1>
       {error && <div className={styles.loginError}>{error}</div>}
       <form className={styles.loginForm} onSubmit={handleSubmit}>

@@ -2,12 +2,14 @@ import { createRoute, z, type OpenAPIHono } from "@hono/zod-openapi";
 import { zValidator } from "@hono/zod-validator";
 import { getApp, type AppEnv } from "./get-app.ts";
 
-import { Competitor } from "../entities/Competitor.entity.ts";
+import { Competitor, EnumRole } from "../entities/Competitor.entity.ts";
 import { sign } from "hono/jwt";
 import { bearerAuth } from "hono/bearer-auth";
 import { getCookie, setCookie } from "hono/cookie";
 import { UserSchemaCreate, type UserCreate } from "../competitors/adapter-rest/competitors.schema.ts";
 import { register } from "module";
+import bcrypt from "bcryptjs";
+
 
 
 
@@ -24,6 +26,7 @@ export const LoginRoutes = {
     login : createRoute({
         method: 'post',
         path: '/login',
+        tags: ['Athentication'],
         summary: 'Login',
         description: 'Login with email and password',
         request: {
@@ -62,6 +65,7 @@ export const LoginRoutes = {
     register : createRoute({
         method: 'post',
         path: '/register',
+        tags: ['Athentication'],
         summary: 'Register',
         description: 'Register with email and password',
         request: {
@@ -113,14 +117,16 @@ export function buildLoginRouter() {
         const em = ctx.get("em") ;
         const competitor = await em.findOne(Competitor, { email });
         if (!competitor) {
-            return ctx.json({ error: "Invalid email or password" } as { error: string }, 401);
+            return ctx.json({ error: "Invalid email" } as { error: string }, 401);
         }
-        if (competitor.password !== password) {
-            return ctx.json({ error: "Invalid email or password" }, 401);
+        const same = await bcrypt.compare(password, competitor.password);
+        if (!same) {
+            return ctx.json({ error: "Invalid password" }, 401);
         }
 
         const payload = {
             id : competitor.id,
+            role : competitor.role
           };
         
         const secret =  process.env.JWT_SECRET || 'your-secret-key' 
@@ -137,8 +143,14 @@ export function buildLoginRouter() {
         if (existingCompetitor) {
             return ctx.json({ error: "Email already exists" } as { error: string }, 401);
         }
+
+        const hashedPassword = await bcrypt.hash(body.password, 10);
     
-        const result = em.create(Competitor, { ...body })
+        const result = em.create(Competitor, { ...body,
+            password: hashedPassword,
+            role: EnumRole.COMPETITOR,
+
+         })
 
         
 
@@ -148,6 +160,7 @@ export function buildLoginRouter() {
 
         const payload = {
             id : result.id,
+            role : result.role
           };
 
         const secret =  process.env.JWT_SECRET || 'your-secret-key' 

@@ -10,12 +10,36 @@ import { TournamentsRoutes } from "./tournaments.openapi.ts";
 import { CompetitorSchema } from "../../competitors/adapter-rest/competitors.schema.ts";
 import type { Bracket } from "../../matches/adapter-rest/matches.schema.ts";
 import { WeightCategory } from "../../entities/weight-category.ts";
+import { decode } from "hono/jwt";
 
 
 export function buildTournamentsRouter() {
     const router = getApp()
 
-    return router.openapi(TournamentsRoutes.get, async (ctx) => {
+    return router.openapi(TournamentsRoutes.me, async (ctx) => {
+        const em = ctx.get("em");
+        const token = ctx.get("authtoken");
+        const payload = decode(token);
+        const user = payload?.payload as { id: string, role: string };
+
+        const result = await em.findOne(Competitor, { id: user.id });
+        if (result == null) {
+            return ctx.text("Not found", 404);
+        }
+
+        const tournaments = await em.find(Tournament, { competitors: result.id }, { populate: ['competitors'] });
+        const tournamentsResult = tournaments.map((tournament) => ({
+            id: tournament.id,
+            name: tournament.name,
+            city: tournament.city,
+            start_date: tournament.start_date,
+            end_date: tournament.end_date ?? undefined,
+        }));
+
+        return ctx.json(tournamentsResult, 200);
+    })
+    
+    .openapi(TournamentsRoutes.get, async (ctx) => {
         const { id } = ctx.req.valid('param')
         const em = ctx.get("em");
         const result = await em.findOne(Tournament, { id })
@@ -139,9 +163,18 @@ export function buildTournamentsRouter() {
                 return ctx.text("Competitor already assigned to category", 409);
             }
 
-             em.nativeDelete(TournamentCompetitorCategory, { tournament: id, competitor: idCompetitor })
+            em.nativeDelete(TournamentCompetitorCategory, { tournament: id, competitor: idCompetitor });
+            
 
-            return ctx.text("Competitor removed from tournament", 202)
+            // Vérifier s'il reste des liens pour ce compétiteur dans ce tournoi
+            const stillIn = await em.findOne(TournamentCompetitorCategory, { tournament: id, competitor: idCompetitor });
+            if (!stillIn) {
+                tournament.competitors.remove(competitor);
+                await em.flush();
+            }
+            em.clear()
+
+            return ctx.text("Competitor removed from tournament", 202);
         })
         .openapi(TournamentsRoutes.getCompetitors, async (ctx) => {
             const { id } = ctx.req.valid('param')

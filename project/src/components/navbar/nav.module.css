@@ -64,15 +64,10 @@ a{
     background-color: #253a5a;
   }
   .logo {
-    width: 300px;  /* Adjust width */
-    height: auto;  /* Maintain aspect ratio */
+    max-width: 100%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
     display: block;
     margin: 0 auto 15px; /* Center the logo */
-}
-
-.logo {
-  width: 300px;
-  height: auto;
-  display: block;
-  margin: 0 auto; /* Centers the logo horizontally */
 }

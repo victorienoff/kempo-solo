@@ -5,6 +5,7 @@ export const CompetitorsRoutes = {
     get: createRoute({
         method: 'get',
         path: '/{id}',
+        tags: ['Competitors'],
         summary: 'Get one competitor',
         description: 'Get one competitor by ID',
         request: {
@@ -35,6 +36,7 @@ export const CompetitorsRoutes = {
     post: createRoute({
         method: 'post',
         path: '',
+        tags: ['Competitors'],
         summary: 'Create one competitor',
         description: 'Create one competitor',
         request: {
@@ -63,6 +65,7 @@ export const CompetitorsRoutes = {
     put: createRoute({
         method: 'put',
         path: '/{id}',
+        tags: ['Competitors'],
         summary: 'Modify one competitor',
         description: 'Modify one competitor',
 
@@ -104,6 +107,7 @@ export const CompetitorsRoutes = {
     delete: createRoute({
         method: 'delete',
         path: '/{id}',
+        tags: ['Competitors'],
         summary: 'Delete one competitor',
         description: 'Delete one competitor by ID',
         request: {
@@ -134,6 +138,7 @@ export const CompetitorsRoutes = {
     getByCategory: createRoute({
         method: 'get',
         path: '/categories/{id}',
+        tags: ['Competitors'],
         summary: 'Get all competitors by category',
         description: 'Get all competitors by category',
         request: {
@@ -163,6 +168,7 @@ export const CompetitorsRoutes = {
     getAll : createRoute({
         method: 'get',
         path: '/',
+        tags: ['Competitors'],
         summary: 'Get all competitors',
         description: 'Get all competitors',
         responses: {
@@ -179,6 +185,7 @@ export const CompetitorsRoutes = {
     getProfile: createRoute({
         method: 'get',
         path: '/me',
+        tags: ['Competitors'],
         summary: 'Get my profile',
         description: 'Get my profile',
         responses: {

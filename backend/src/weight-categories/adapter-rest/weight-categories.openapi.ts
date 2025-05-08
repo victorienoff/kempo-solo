@@ -5,6 +5,7 @@ export const WeightCategoriesRoutes = {
     getWeightCategories: createRoute({
         method: 'get',
         path: '',
+        tags: ['Information'],
         summary: 'Get all weight categories',
         description: 'Get all weight categories',
         responses : {
@@ -33,6 +34,7 @@ export const WeightCategoriesRoutes = {
     getWeightCategoriesById: createRoute({
         method: 'get',
         path: '/{id}',
+        tags: ['Information'],
         summary: 'Get weight category by id',
         description: 'Get weight category by id',
         request: {

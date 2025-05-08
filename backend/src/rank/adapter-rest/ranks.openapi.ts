@@ -5,6 +5,7 @@ export const RanksRoutes = {
     list: createRoute({
         method: 'get',
         path: '',
+        tags: ['Information'],
         summary: 'Get all ranks',
         description: 'Get all ranks',
         responses: {

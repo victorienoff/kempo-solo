@@ -11,6 +11,7 @@ export const TournamentSchema = z.object({
     city: z.optional(z.string()),
     start_date: z.optional(z.coerce.date()),
     end_date: z.optional(z.coerce.date()),
+    description : z.optional(z.string())
 })
 
 export type Tournament = z.infer<typeof TournamentSchema>
