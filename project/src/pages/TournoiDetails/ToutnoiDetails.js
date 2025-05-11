@@ -13,7 +13,17 @@ const TournoiDetails = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/tournaments/${tournamentId}/categories`);
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
+      const res = await axios.get(
+        `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
+        axiosConfig
+      );
       setCategories(res.data);
     } catch (err) {
       console.error("Erreur chargement catégories :", err);
@@ -28,6 +38,13 @@ const TournoiDetails = () => {
 
   const handleCategorySubmit = async (categoryData) => {
     try {
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
       const payload = {
         name: "AutoCat", // You may modify this or make it dynamic
         rank: categoryData.grades,
@@ -35,9 +52,13 @@ const TournoiDetails = () => {
         weight_category: categoryData.weight_category_id,
         elimination_type: "Directe",
         age_group: categoryData.age_group_id,
-      };
+      }
 
-      await axios.post(`http://localhost:3000/tournaments/${tournamentId}/categories`, payload);
+      await axios.post(
+        `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
+        payload,
+        axiosConfig
+      );
       alert("Catégorie ajoutée avec succès !");
       fetchCategories();
     } catch (error) {
@@ -62,7 +83,18 @@ const TournoiDetails = () => {
     };
 
     try {
-      await axios.post(`http://localhost:3000/tournaments/${tournamentId}/categories`, testPayload);
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
+      await axios.post(
+        `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
+        testPayload,
+        axiosConfig
+      );
       alert("✅ Catégorie de test insérée !");
       fetchCategories();
     } catch (err) {

@@ -15,6 +15,7 @@ const TournoiTable = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [userId, setUSerId] = useState(null);
+  const [userRights, setUserRights] = useState([]); // Ajouté pour stocker les droits
   const [myTournaments, setMyTournaments] = useState([]);
 
   // Fetch tournaments
@@ -51,8 +52,10 @@ const TournoiTable = () => {
         const decoded = jwtDecode(token);
         setUserRole(decoded.role);
         setUSerId(decoded.id);
+        setUserRights(decoded.rights || []); // Stocker les droits
       } catch (e) {
         setUserRole(null);
+        setUserRights([]);
       }
     }
     fetchTournaments();
@@ -220,7 +223,8 @@ const TournoiTable = () => {
                       </button>
                     </>
                   )}
-                  {userRole && (
+                  {/* Afficher le bouton détails seulement si le droit tournamentUpdate est présent */}
+                  {userRights.includes("tournamentUpdate") && (
                     <Link to={`/tournoiDetails/${comp.id}`}>
                       <button className={styles["details-btn"]}>Voir Détails</button>
                     </Link>

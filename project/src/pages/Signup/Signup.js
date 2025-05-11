@@ -26,7 +26,7 @@ function Signup() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/ranks")
+    fetch("http://localhost:3000/api/ranks")
       .then((res) => res.json())
       .then((data) => setRanks(data))
       .catch(() => setRanks([]));

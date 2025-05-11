@@ -795,6 +795,67 @@ export const TournamentsRoutes = {
             },
         }
     }),
+    deleteCompetitorFromCategory: createRoute({
+        method: 'delete',
+        path: '/categories/{id}/delete-competitor/{competitorId}',
+        tags: ['Categories'],
+        summary: 'Delete one competitor from a category',
+        description: 'Delete one competitor from a category',
+        request: {
+            params: z.object({
+                id: z.string().uuid(),
+                competitorId: z.string().uuid()
+            })
+        },
+        responses: {
+            200: {
+                description: 'Competitor deleted from category',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            404: {
+                description: 'Category or Competitor not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+        }
+    }),
+    getCompetitorWithoutCategory: createRoute({
+        method: 'get',
+        path: '/{id}/competitor-without-category',
+        tags: ['Tournaments'],
+        summary: 'Get all competitors without category',
+        description: 'Get all competitors without category',
+        request: {
+            params: z.object({
+                id: z.string().uuid()
+            })
+        },
+        responses: {
+            200: {
+                description: 'Details of the competitors',
+                content: {
+                    'application/json': {
+                        schema: z.array(CompetitorSchema)
+                    }
+                }
+            },
+            404: {
+                description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+        }
+    })
 
 
 

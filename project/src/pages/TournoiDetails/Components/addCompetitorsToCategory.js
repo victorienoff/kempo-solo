@@ -14,10 +14,21 @@ const AddCompetitorsToCategory = () => {
   const [assignedCompetitors, setAssignedCompetitors] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getAxiosConfig = () => {
+    const token = localStorage.getItem("token");
+    return {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json"
+      }
+    };
+  };
+
   const fetchCompetitors = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/competitors/categories/${categoryId}`
+        `http://localhost:3000/api/tournaments/${tournamentId}/competitor-without-category`,
+        getAxiosConfig()
       );
       setCompetitors(res.data);
     } catch (error) {
@@ -25,22 +36,11 @@ const AddCompetitorsToCategory = () => {
     }
   };
 
-  const fetchAssignedCompetitors = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3000/tournaments/${tournamentId}/competitors`
-      );
-      setAssignedCompetitors(res.data);
-    } catch (error) {
-      console.error("❌ Erreur chargement compétiteurs assignés:", error);
-    }
-  };
-
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
       await fetchCompetitors();
-      await fetchAssignedCompetitors();
+      
       setLoading(false);
     };
 
@@ -49,17 +49,15 @@ const AddCompetitorsToCategory = () => {
 
   const handleAddClick = async (competitorId) => {
     try {
-      await axios.post(
-        `http://localhost:3000/tournaments/${tournamentId}/add-competitor/${competitorId}`
-      );
 
       await axios.post(
-        `http://localhost:3000/tournaments/${tournamentId}/assign-competitor/${categoryId}`,
-        { competitor_id: competitorId }
+        `http://localhost:3000/api/tournaments/${tournamentId}/assign-competitor/${categoryId}`,
+        { competitor_id: competitorId },
+        getAxiosConfig()
       );
 
       alert("✅ Compétiteur ajouté et assigné à la catégorie !");
-      await fetchAssignedCompetitors();
+      ;
     } catch (error) {
       console.error("❌ Erreur ajout :", error.response?.data || error.message);
       alert("Erreur ajout compétiteur.");
@@ -69,7 +67,9 @@ const AddCompetitorsToCategory = () => {
   const handleStartTournament = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/tournaments/${tournamentId}/start`
+        `http://localhost:3000/api/tournaments/${tournamentId}/start`,
+        {},
+        getAxiosConfig()
       );
       alert("🚀 Tournoi démarré !");
       console.log("Réponse :", res.data);

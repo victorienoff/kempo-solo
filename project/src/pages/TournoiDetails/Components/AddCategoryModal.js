@@ -5,8 +5,8 @@ import axios from "axios";
 const gradesList = [
   "Ceinture Blanche", "Ceinture Jaune", "Ceinture Orange", "Ceinture Verte",
   "Ceinture Bleue", "Ceinture Marron",
-  "Ceinture Noire 1er Dan", "Ceinture Noire 2ème Dan", "Ceinture Noire 3ème Dan",
-  "Ceinture Noire 4ème Dan", "Ceinture Noire 5ème Dan", "Ceinture Noire 6ème Dan"
+  "Ceinture Noire 1ère dan", "Ceinture Noire 2ème dan", "Ceinture Noire 3ème dan",
+  "Ceinture Noire 4ème dan", "Ceinture Noire 5ème dan", "Ceinture Noire 6ème dan"
 ];
 
 const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
@@ -20,9 +20,16 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
+        const token = localStorage.getItem("token");
+        const axiosConfig = {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json"
+          }
+        };
         const [weights, ages] = await Promise.all([
-          axios.get("http://localhost:3000/weight-categories"),
-          axios.get("http://localhost:3000/age-groups")
+          axios.get("http://localhost:3000/api/weight-categories", axiosConfig),
+          axios.get("http://localhost:3000/api/age-groups", axiosConfig)
         ]);
         setWeightCategories(weights.data);
         setAgeGroups(ages.data);
@@ -65,42 +72,58 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
       <div className={styles.modal}>
         <h2>Ajouter une Catégorie</h2>
         <form onSubmit={handleSubmit}>
-          <fieldset>
+          <fieldset style={{ display: "flex", flexDirection: "column", gap: "0.3em" }}>
             <legend>Grade *</legend>
-            {gradesList.map((grade) => (
-              <label key={grade}>
-                <input
-                  type="checkbox"
-                  checked={selectedGrades.includes(grade)}
-                  onChange={() => handleGradeChange(grade)}
-                />
-                {grade}
-              </label>
-            ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.2em" }}>
+              {gradesList.map((grade) => (
+                <label
+                  key={grade}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    whiteSpace: "nowrap",
+                    fontWeight: "normal"
+                  }}
+                >
+                  <span style={{ minWidth: "150px", display: "inline-block" }}>{grade}</span>
+                  <input
+                    type="checkbox"
+                    checked={selectedGrades.includes(grade)}
+                    onChange={() => handleGradeChange(grade)}
+                    style={{ marginLeft: "1em" }}
+                  />
+                </label>
+              ))}
+            </div>
           </fieldset>
 
           <fieldset>
             <legend>Genre *</legend>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="H"
-                checked={gender === "H"}
-                onChange={(e) => setGender(e.target.value)}
-              />
-              Homme
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="F"
-                checked={gender === "F"}
-                onChange={(e) => setGender(e.target.value)}
-              />
-              Femme
-            </label>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.2em" }}>
+              <label style={{ display: "flex", alignItems: "center", fontWeight: "normal" }}>
+                <span style={{ minWidth: "70px", display: "inline-block" }}>Homme</span>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="H"
+                  checked={gender === "H"}
+                  onChange={(e) => setGender(e.target.value)}
+                  style={{ marginLeft: "1em" }}
+                />
+              </label>
+              <label style={{ display: "flex", alignItems: "center", fontWeight: "normal" }}>
+                <span style={{ minWidth: "70px", display: "inline-block" }}>Femme</span>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="F"
+                  checked={gender === "F"}
+                  onChange={(e) => setGender(e.target.value)}
+                  style={{ marginLeft: "1em" }}
+                />
+              </label>
+            </div>
           </fieldset>
 
           <label>

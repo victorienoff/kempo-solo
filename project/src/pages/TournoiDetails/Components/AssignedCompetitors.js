@@ -1,26 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import styles from "./AssignedCompetitors.module.css";
 
 const AssignedCompetitors = () => {
   const { id: tournamentId } = useParams();
+  const location = useLocation();
+  const categoryId = new URLSearchParams(location.search).get("categoryId");
   const [assignedCompetitors, setAssignedCompetitors] = useState([]);
 
-  // Fetch assigned competitors
+  // Fetch competitor of category in tournament
   const fetchAssignedCompetitors = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/tournaments/${tournamentId}/competitors`);
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
+      const res = await axios.get(
+        `http://localhost:3000/api/tournaments/categories/${categoryId}/competitors`,
+        axiosConfig
+      );
       setAssignedCompetitors(res.data);
     } catch (error) {
       console.error("❌ Erreur récupération compétiteurs assignés:", error);
     }
   };
 
-  // Delete competitor from tournament
+  // Delete competitor from tournament 
   const handleDelete = async (competitorId) => {
     try {
-      await axios.delete(`http://localhost:3000/tournaments/${tournamentId}/delete-competitor/${competitorId}`);
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
+      await axios.delete(
+        `http://localhost:3000/api/tournaments/categories/${categoryId}/delete-competitor/${competitorId}`,
+        axiosConfig
+      );
       alert("✅ Compétiteur supprimé !");
       fetchAssignedCompetitors(); // Refresh list after delete
     } catch (error) {
@@ -31,7 +53,7 @@ const AssignedCompetitors = () => {
 
   useEffect(() => {
     fetchAssignedCompetitors();
-  }, [tournamentId]);
+  }, [tournamentId, categoryId]);
 
   return (
     <div className={styles.container}>

@@ -639,7 +639,8 @@ export function buildTournamentsRouter() {
                     keikuka2: match.keikuka2,
                     winner: match.winner?.id ?? null,
                     isFinished: match.isFinished,
-                    pool_number: match.pool_number
+                    pool_number: match.pool_number,
+                    next_match: match.next_match?.id ?? null
                 }
             }), 200)
 
@@ -778,7 +779,33 @@ export function buildTournamentsRouter() {
             });
 
             return ctx.json(bracket, 200);
-        });
+        })
+        .openapi(TournamentsRoutes.deleteCompetitorFromCategory, async (ctx) => {
+            const { id } = ctx.req.valid('param')
+            const { competitorId } = ctx.req.valid('param')
+            const em = ctx.get("em")
+            const tournamentCompetitorCategory = await em.findOne(TournamentCompetitorCategory, { category: id, competitor: competitorId }, { populate: ['competitor'] })
+            if (tournamentCompetitorCategory == null) {
+                return ctx.text("Not found", 404);
+            }
+            tournamentCompetitorCategory.category = undefined;
+            await em.persistAndFlush(tournamentCompetitorCategory)
+            return ctx.text("Competitor removed from category", 200)
+        })
+        .openapi(TournamentsRoutes.getCompetitorWithoutCategory, async (ctx) => {
+            const { id } = ctx.req.valid('param')
+            const em = ctx.get("em")
+            const tournamentCompetitorCategory = await em.find(TournamentCompetitorCategory, { tournament: id }, { populate: ['competitor'] })
+            if (tournamentCompetitorCategory == null) {
+                return ctx.text("Not found", 404);
+            }
+            const competitors = tournamentCompetitorCategory.filter(tc => tc.category == null).map(tc => tc.competitor)
+            if (competitors == null) {
+                return ctx.text("No competitor without category", 404);
+            }
+            return ctx.json(competitors, 200)
+        })
+
 }
 
 

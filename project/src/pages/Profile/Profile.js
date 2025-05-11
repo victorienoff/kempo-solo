@@ -66,7 +66,7 @@ function Profile() {
     setEditMode(true);
   };
 
-  const handleValidate = async () => {
+   const handleValidate = async () => {
     try {
       const token = localStorage.getItem("token");
       await fetch(`http://localhost:3000/api/competitors/${user.id}`, {
