@@ -54,11 +54,13 @@ const Filter = ({
         </select>
       </div>
 
+      {/*
       <div className={styles.filterItem}>
         <button className={styles.addButton} onClick={onOpenAddModal}>
           <span>➕</span> Ajouter Compétiteur
         </button>
       </div>
+      */}
     </div>
   );
 };

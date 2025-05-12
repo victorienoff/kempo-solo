@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./CompetitorsTable.module.css";
 import Filter from "./Filter";
-import AjouterCompetiteurs from "./AddCompetitors";
 import EditCompetitors from "./EditCompetitors";
 
 const CompetitorTable = () => {
@@ -10,7 +9,6 @@ const CompetitorTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("");
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const [selectedCompetitor, setSelectedCompetitor] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -39,11 +37,6 @@ const CompetitorTable = () => {
       .catch(() => setRanks([]));
   }, []);
 
-  const handleAdd = (newCompetitor) => {
-    setCompetitors([...competitors, newCompetitor]);
-    setIsAddModalOpen(false);
-  };
-
   const openEditModal = (competitor) => {
     setSelectedCompetitor(competitor);
     setIsEditModalOpen(true);
@@ -60,7 +53,7 @@ const CompetitorTable = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/competitors/${competitorId}`, {
+      await axios.delete(`http://localhost:3000/api/competitors/${competitorId}`, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
           "Content-Type": "application/json"
@@ -91,7 +84,6 @@ const CompetitorTable = () => {
         setSelectedDate={setSelectedDate}
         selectedGrade={selectedGrade}
         setSelectedGrade={setSelectedGrade}
-        onOpenAddModal={() => setIsAddModalOpen(true)}
         ranks={ranks}
       />
 
@@ -130,12 +122,6 @@ const CompetitorTable = () => {
           </tbody>
         </table>
       </div>
-
-      <AjouterCompetiteurs
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onAdd={handleAdd}
-      />
 
       <EditCompetitors
         isOpen={isEditModalOpen}

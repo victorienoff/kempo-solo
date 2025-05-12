@@ -36,8 +36,16 @@ const NavBar = () => {
 
                     <>
                     <Link to="/competiteurs"><li><span className={style.icon}>👥</span><span className={style.linkText}>Compétiteurs</span></li></Link>
-                        <Link to="/telecommande"><li><span className={style.icon}>🎚️</span><span className={style.linkText}>Telecommande</span></li></Link>
-                        <Link to="/scoreboard"><li><span className={style.icon}>📺</span><span className={style.linkText}>Scoarboard</span></li></Link>
+                        <li
+                            onClick={() => {
+                                window.open(window.location.origin + '/telecommande', '_blank', 'noopener,noreferrer,width=800,height=600,left=100,top=100');
+                                // NE PAS ouvrir scoreboard ici !
+                            }}
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        >
+                            <span className={style.icon}>📺</span>
+                            <span className={style.linkText}>Scoreboard</span>
+                        </li>
                     </>
                 )}
             </ul>

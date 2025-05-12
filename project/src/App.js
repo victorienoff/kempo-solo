@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './App.css';
 import NavBar from './components/navbar/Navbar'
-import Home from './pages/home/home';
+import Home from './pages/Home/home';
 import Tournaments from './pages/Tournaments/Tournaments'
 import Competitors from "./pages/Competitors/Competitors";
 import TournoiDetails from "./pages/TournoiDetails/ToutnoiDetails"
@@ -18,24 +18,21 @@ import PasswordReset from "./pages/PasswordReset/PasswordReset";
 function App() {
   return (
     <Router>
-      <AuthButtons />
-      <div className="App">
-        <NavBar />
-        <Routes>
-          <Route path='/' element={<div className='content'><Home /></div>}></Route>
-          <Route path='/tournaments' element={<div className='content'><Tournaments /></div>}></Route>
-          <Route path='/competiteurs' element={<div className='content'><Competitors /></div>}></Route>
-          <Route path='/telecommande' element={<div className='content'><Telecommande /></div>}></Route>
-          <Route path='/scoreboard' element={<div className='content'><Scoreboard /></div>}></Route>
-          <Route path='/tournoiDetails/:id' element={<TournoiDetails />}></Route>
-          <Route path="/tournoiDetails/:id/ajouter-competiteurs" element={<AddCompetitorsToCategory />} />
-          <Route path="/matches/:categoryId" element={<MatchesTable />} />
-          <Route path="/login" element={<div className='content'><Login /></div>}></Route>
-          <Route path="/profile" element={<div className='content'><Profile /></div>} />
-          <Route path="/signup" element={<div className='content'><Signup /></div>} />
-          <Route path="/passwordreset/:token" element={<div className='content'><PasswordReset /></div>} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path='/telecommande' element={<div className='content'><Telecommande /></div>}></Route>
+        <Route path='/scoreboard' element={<div className='content'><Scoreboard /></div>}></Route>
+        {/* Pages sans navbar ni auth */}
+        <Route path='/' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Home /></div></div></>}></Route>
+        <Route path='/tournaments' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Tournaments /></div></div></>}></Route>
+        <Route path='/competiteurs' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Competitors /></div></div></>}></Route>
+        <Route path='/tournoiDetails/:id' element={<><AuthButtons /><div className='App'><NavBar /><TournoiDetails /></div></>}></Route>
+        <Route path="/tournoiDetails/:id/ajouter-competiteurs" element={<><AuthButtons /><div className='App'><NavBar /><AddCompetitorsToCategory /></div></>}/>
+        <Route path="/matches/:categoryId" element={<><AuthButtons /><div className='App'><NavBar /><MatchesTable /></div></>}/>
+        <Route path="/login" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Login /></div></div></>}></Route>
+        <Route path="/profile" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Profile /></div></div></>}/>
+        <Route path="/signup" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Signup /></div></div></>}/>
+        <Route path="/passwordreset/:token" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><PasswordReset /></div></div></>}/>
+      </Routes>
     </Router>
   );
 }
