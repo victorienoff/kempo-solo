@@ -97,9 +97,8 @@ export function buildMailRouter() {
                             },
                         ],
                         Subject: 'Réinitialisation de votre mot de passe',
-                        TextPart: 'Greetings from Mailjet!',
                         HTMLPart:
-                            '<h3>  welcome to <a href=" http://localhost:3001/passwordreset/'+token+'">Mailjet</a>!</h3><br />May the delivery force be with you!',
+                            '<h3> Vous avez boublié votre mot de passe ? Pas de soucis  <a href=" http://localhost:3001/passwordreset/'+token+'">Cliquez-ici !</a>!</h3><br /><p> Si vous n\'êtes pas à l\'origine de cette demande, vous pouvez ignorer ce message.</p>',
                     },
                 ],
             });

@@ -59,7 +59,13 @@ const CompetitorTable = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:3000/competitors/${competitorId}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3000/competitors/${competitorId}`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      });
       setCompetitors(prev => prev.filter(c => c.id !== competitorId));
       alert("✅ Compétiteur supprimé !");
     } catch (error) {

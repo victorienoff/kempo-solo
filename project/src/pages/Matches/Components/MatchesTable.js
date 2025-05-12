@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./MatchesTable.module.css";
@@ -53,8 +53,20 @@ const MatchesTable = () => {
   const [matches, setMatches] = useState([]);
   const [competitors, setCompetitors] = useState({});
   const [loading, setLoading] = useState(true);
+  const [openFormMatchId, setOpenFormMatchId] = useState(null);
+  const [formData, setFormData] = useState({ score1: '', score2: '', winner: '', keikuka1: '', keikuka2: '' });
 
-  const fetchCompetitor = async (id, axiosConfigParam) => {
+  const isWinnerEditable = (formData) => {
+    const s1 = formData.score1 !== '';
+    const s2 = formData.score2 !== '';
+    const k1 = formData.keikuka1 !== '';
+    const k2 = formData.keikuka2 !== '';
+    if (!(s1 && s2 && k1 && k2)) return false;
+    return Number(formData.score1) === Number(formData.score2) && Number(formData.keikuka1) === Number(formData.keikuka2);
+  };
+
+  // Utilise useCallback pour éviter la redéfinition à chaque rendu
+  const fetchCompetitor = useCallback(async (id, axiosConfigParam) => {
     if (competitors[id]) return competitors[id];
     try {
       const token = localStorage.getItem("token");
@@ -71,7 +83,7 @@ const MatchesTable = () => {
     } catch (err) {
       return id;
     }
-  };
+  }, [competitors]);
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -103,8 +115,74 @@ const MatchesTable = () => {
     fetchMatches();
   }, [categoryId, fetchCompetitor]);
 
+  useEffect(() => {
+    // Calcul automatique du gagnant si ce n'est pas un cas d'égalité
+    if (!isWinnerEditable(formData)) {
+      const s1 = Number(formData.score1);
+      const s2 = Number(formData.score2);
+      const k1 = Number(formData.keikuka1);
+      const k2 = Number(formData.keikuka2);
+      let winner = '';
+      if (s1 > s2) winner = openFormMatchId ? matches.find(m => m.id === openFormMatchId)?.competitor1 : '';
+      else if (s2 > s1) winner = openFormMatchId ? matches.find(m => m.id === openFormMatchId)?.competitor2 : '';
+      else if (k1 > k2) winner = openFormMatchId ? matches.find(m => m.id === openFormMatchId)?.competitor2 : '';
+      else if (k2 > k1) winner = openFormMatchId ? matches.find(m => m.id === openFormMatchId)?.competitor1 : '';
+      setFormData((prev) => ({ ...prev, winner }));
+    }
+    // eslint-disable-next-line
+  }, [formData.score1, formData.score2, formData.keikuka1, formData.keikuka2, openFormMatchId]);
+
   const handleScoreboardClick = (matchId) => {
     navigate(`/matches/${matchId}/scoreboard`);
+  };
+
+  const handleOpenForm = (match) => {
+    setOpenFormMatchId(match.id);
+    setFormData({
+      score1: match.score1 || '',
+      score2: match.score2 || '',
+      winner: match.winner || '',
+      keikuka1: match.keikuka1 || '',
+      keikuka2: match.keikuka2 || '',
+    });
+  };
+
+  const handleCloseForm = () => {
+    setOpenFormMatchId(null);
+    setFormData({ score1: '', score2: '', winner: '', keikuka1: '', keikuka2: '' });
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFormSubmit = async (e, match) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(
+        `http://localhost:3000/api/matches/${match.id}`,
+        {
+          score1: formData.score1,
+          score2: formData.score2,
+          winner: formData.winner,
+          keikuka1: formData.keikuka1,
+          keikuka2: formData.keikuka2,
+        },
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      // Refresh matches
+      setMatches((prev) => prev.map((m) => m.id === match.id ? { ...m, ...formData } : m));
+      handleCloseForm();
+    } catch (err) {
+      alert('Erreur lors de la mise à jour du match');
+    }
   };
 
   return (
@@ -127,21 +205,61 @@ const MatchesTable = () => {
             </thead>
             <tbody>
               {matches.map((m) => (
-                <tr key={m.id}>
-                  <td>{competitors[m.competitor1] || m.competitor1}</td>
-                  <td>{competitors[m.competitor2] || m.competitor2}</td>
-                  <td>{m.score1}</td>
-                  <td>{m.score2}</td>
-                  <td>{competitors[m.winner] || m.winner || "-"}</td>
-                  <td>
-                    <button
-                      className={styles.scoreboardButton}
-                      onClick={() => handleScoreboardClick(m.id)}
-                    >
-                      Scoreboard
-                    </button>
-                  </td>
-                </tr>
+                <React.Fragment key={m.id}>
+                  <tr>
+                    <td>{competitors[m.competitor1] || m.competitor1}</td>
+                    <td>{competitors[m.competitor2] || m.competitor2}</td>
+                    <td>{m.score1}</td>
+                    <td>{m.score2}</td>
+                    <td>{competitors[m.winner] || m.winner || '-'}</td>
+                    <td>
+                      <button
+                        className={styles.scoreboardButton}
+                        onClick={() => handleScoreboardClick(m.id)}
+                      >
+                        Scoreboard
+                      </button>
+                      <button
+                        className={styles.resultButton}
+                        style={{ marginLeft: 8 }}
+                        onClick={() => handleOpenForm(m)}
+                      >
+                        Rentrer des résultats
+                      </button>
+                    </td>
+                  </tr>
+                  {openFormMatchId === m.id && (
+                    <tr>
+                      <td colSpan={6}>
+                        <form onSubmit={(e) => handleFormSubmit(e, m)} className={styles.formRow}>
+                          <div className={styles.scoreInputs}>
+                            <label>Score 1:
+                              <input type="number" name="score1" value={formData.score1} onChange={handleFormChange} required style={{ width: 60, marginLeft: 4 }} />
+                            </label>
+                            <label>Score 2:
+                              <input type="number" name="score2" value={formData.score2} onChange={handleFormChange} required style={{ width: 60, marginLeft: 4 }} />
+                            </label>
+                          </div>
+                          <label>Keikuka 1:
+                            <input type="number" name="keikuka1" value={formData.keikuka1} onChange={handleFormChange} min="0" style={{ width: 60, marginLeft: 4 }} />
+                          </label>
+                          <label>Keikuka 2:
+                            <input type="number" name="keikuka2" value={formData.keikuka2} onChange={handleFormChange} min="0" style={{ width: 60, marginLeft: 4 }} />
+                          </label>
+                          <label>Gagnant:
+                            <select name="winner" value={formData.winner} onChange={handleFormChange} required style={{ marginLeft: 4 }} disabled={!isWinnerEditable(formData)}>
+                              <option value="">Choisir</option>
+                              <option value={m.competitor1}>{competitors[m.competitor1] || m.competitor1}</option>
+                              <option value={m.competitor2}>{competitors[m.competitor2] || m.competitor2}</option>
+                            </select>
+                          </label>
+                          <button type="submit" className={styles.saveButton}>Enregistrer</button>
+                          <button type="button" onClick={handleCloseForm} className={styles.cancelButton}>Annuler</button>
+                        </form>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

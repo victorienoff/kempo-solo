@@ -103,11 +103,35 @@ const TournoiDetails = () => {
     }
   };
 
+  // Ajout de la logique pour démarrer le tournoi
+  const handleStartTournament = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
+      await axios.post(
+        `http://localhost:3000/api/tournaments/${tournamentId}/start`,
+        {},
+        axiosConfig
+      );
+      alert("Tournoi démarré !");
+      // Tu peux ici recharger les infos du tournoi si besoin
+    } catch (error) {
+      console.error("Erreur lors du démarrage du tournoi:", error.response?.data || error.message);
+      alert("Erreur lors du démarrage du tournoi. Voir la console.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h2>Détails du Tournoi</h2>
 
       <div className={styles.actions}>
+        <button className={styles.startBtn} onClick={handleStartTournament}>Commencer le tournoi</button>
         <button onClick={handleAddCategory}>➕ Ajouter Catégorie</button>
         {/* <button onClick={handleManualTestInsert}>📥 Insert Test Catégorie</button> */}
       </div>

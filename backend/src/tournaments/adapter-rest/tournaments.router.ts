@@ -58,6 +58,7 @@ export function buildTournamentsRouter() {
     })
         .openapi(TournamentsRoutes.post, async (ctx) => {
             const body = ctx.req.valid("json")
+            console.log(body)
 
             const em = ctx.get("em");
             const result = em.create(Tournament, {
@@ -81,6 +82,7 @@ export function buildTournamentsRouter() {
 
             result.name = body.name ?? result.name
             result.city = body.city ?? result.city
+            result.description = body.description ?? result.description
             result.start_date = body.start_date ?? result.start_date
             result.end_date = body.end_date ?? result.end_date
 
@@ -588,7 +590,8 @@ export function buildTournamentsRouter() {
                     keikuka2: match.keikuka2,
                     winner: match.winner?.id ?? null,
                     isFinished: match.isFinished,
-                    pool_number: match.pool_number
+                    pool_number: match.pool_number,
+                    next_match: match.next_match?.id ?? null
                 }
             }), 200)
         })
@@ -611,7 +614,8 @@ export function buildTournamentsRouter() {
                 keikuka2: match.keikuka2,
                 winner: match.winner?.id ?? null,
                 isFinished: match.isFinished,
-                pool_number: match.pool_number
+                pool_number: match.pool_number,
+                next_match: match.next_match?.id ?? null
             }, 200)
         })
         .openapi(TournamentsRoutes.getMatches, async (ctx) => {
@@ -774,7 +778,9 @@ export function buildTournamentsRouter() {
                     competitor2: match.competitor2?.id ?? null,
                     winner: match.winner?.id ?? null,
                     isFinished: match.isFinished,
-                    next_match: match.next_match ? match.next_match.id : null
+                    next_match: match.next_match ? match.next_match.id : null,
+                    score1: match.score1 ,
+                    score2: match.score2
                 });
             });
 

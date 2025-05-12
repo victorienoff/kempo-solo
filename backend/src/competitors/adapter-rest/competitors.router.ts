@@ -32,6 +32,7 @@ export function buildCompetitorsRouter() {
             rank: result.rank,
             gender: result.gender,
             email: result.email,
+            role: result.role
         },200)
     })
     
@@ -91,7 +92,8 @@ export function buildCompetitorsRouter() {
             result.country = body.country ?? result.country
             result.weight = body.weight ?? result.weight
             result.rank = body.rank ?? result.rank
-            result.gender = body.gender ?? result.gender
+            result.gender = body.gender ?? result.gender,
+            result.role = body.role ?? result.role
 
 
 

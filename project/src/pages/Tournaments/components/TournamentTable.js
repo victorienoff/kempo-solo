@@ -175,6 +175,31 @@ const TournoiTable = () => {
     }
   };
 
+  // Ajout de la fonction pour démarrer un tournoi
+  const handleStartTournament = async (tournamentId) => {
+    const confirm = window.confirm("Voulez-vous vraiment commencer ce tournoi ?");
+    if (!confirm) return;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/start`, {
+        method: "POST",
+        headers: {
+          "Authorization": token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      });
+      if (response.ok) {
+        alert("Tournoi démarré !");
+        fetchTournaments();
+      } else {
+        const data = await response.json();
+        alert(data.message || "Erreur lors du démarrage du tournoi.");
+      }
+    } catch (error) {
+      alert("Erreur réseau lors du démarrage du tournoi.");
+    }
+  };
+
   return (
     <div className={styles["table-container"]}>
       <Filters
@@ -221,6 +246,15 @@ const TournoiTable = () => {
                       >
                         Supprimer
                       </button>
+                      {/* Bouton Commencer le tournoi si non démarré */}
+                      {comp.status !== "started" && (
+                        <button
+                          className={styles["start-btn"]}
+                          onClick={() => handleStartTournament(comp.id)}
+                        >
+                          Commencer le tournoi
+                        </button>
+                      )}
                     </>
                   )}
                   {/* Afficher le bouton détails seulement si le droit tournamentUpdate est présent */}

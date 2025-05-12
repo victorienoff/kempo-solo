@@ -8,6 +8,7 @@ const CreationTournoi = () => {
   const [date, setDate] = useState("");
   const [multiDay, setMultiDay] = useState(false);
   const [city, setCity] = useState("");
+  const [description, setDescription] = useState("");
 
   const [grades, setGrades] = useState([]);
   const [genders, setGenders] = useState([]);
@@ -38,7 +39,8 @@ const CreationTournoi = () => {
       grades.length === 0 ||
       genders.length === 0 ||
       eliminationSystems.length === 0 ||
-      importType === ""
+      importType === "" ||
+      !description.trim()
     ) {
       alert("Veuillez remplir tous les champs obligatoires.");
       return;
@@ -49,14 +51,17 @@ const CreationTournoi = () => {
       rank: grades[0] || "",
       city: city,
       start_date: date,
-      end_date: multiDay ? calculateEndDate(date) : date
+      end_date: multiDay ? calculateEndDate(date) : date,
+      description: description.trim() || "Pas de description"
     };
 
     try {
-      const response = await fetch("http://localhost:3000/tournaments", {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3000/api/tournaments", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : ""
         },
         body: JSON.stringify(tournamentData)
       });
@@ -82,6 +87,7 @@ const CreationTournoi = () => {
     setGenders([]);
     setEliminationSystems([]);
     setImportType("");
+    setDescription("");
     setIsOpen(false);
   };
 
@@ -141,6 +147,17 @@ const CreationTournoi = () => {
                   onChange={e => setMultiDay(e.target.checked)}
                 />
               </label>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Description :</label>
+              <input
+                type="text"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                className="border border-gray-300 rounded p-2 w-full"
+                required
+              />
             </div>
 
             <div className={styles.groupBox}>

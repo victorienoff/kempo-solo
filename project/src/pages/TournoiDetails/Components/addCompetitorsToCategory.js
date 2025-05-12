@@ -93,7 +93,7 @@ const AddCompetitorsToCategory = () => {
       {loading ? (
         <p>Chargement...</p>
       ) : unassignedCompetitors.length === 0 ? (
-        <p>✅ Tous les compétiteurs de cette catégorie ont été ajoutés au tournoi.</p>
+        <p>Aucun compétiteurs supplementaires disponibles </p>
       ) : (
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
@@ -136,10 +136,6 @@ const AddCompetitorsToCategory = () => {
       <AssignedCompetitors />
 
       <div className={styles.startBtnWrapper}>
-        <button className={styles.startBtn} onClick={handleStartTournament}>
-          🚀 Commencer le tournoi
-        </button>
-
         <button className={styles.matchBtn} onClick={handleGoToMatches}>
           📋 Matchs
         </button>

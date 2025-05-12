@@ -2,6 +2,7 @@ import { z } from "@hono/zod-openapi";
 import { EnumRank } from "../../entities/Tournament.entity.ts";
 import { AgeGroup } from "../../entities/age-group.entity.ts";
 import { EnumGender } from "../../entities/weight-category.ts";
+import { EnumRole } from "../../entities/Competitor.entity.ts";
 
 
 export const CompetitorSchema = z.object({
@@ -14,6 +15,7 @@ export const CompetitorSchema = z.object({
     weight: z.coerce.number().optional(),
     rank: z.nativeEnum(EnumRank),
     gender: z.nativeEnum(EnumGender),
+    role: z.nativeEnum(EnumRole).optional()
 })
 
 export const CompetitorSchemaCreate = CompetitorSchema.omit({id : true})

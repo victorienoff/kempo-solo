@@ -58,7 +58,7 @@ const AssignedCompetitors = () => {
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>
-        ✅ Compétiteurs déjà ajoutés au tournoi
+        ✅ Compétiteurs déjà ajoutés à la catégorie
       </h3>
       <table className={styles.table}>
         <thead>
@@ -90,7 +90,7 @@ const AssignedCompetitors = () => {
                   className={styles.deleteBtn}
                   onClick={() => handleDelete(c.id)}
                 >
-                  ❌ Supprimer
+                  Supprimer
                 </button>
               </td>
             </tr>

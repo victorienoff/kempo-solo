@@ -12,7 +12,14 @@ const EditCompetitors = ({ isOpen, onClose, competitor, onSave }) => {
     weight: "",
     rank: "",
     gender: "",
+    role: "",
   });
+
+  const ROLES = [
+    { value: "Admin", label: "Admin" },
+    { value: "Competiteur", label: "Compétiteur" },
+    { value: "Gestionnaire", label: "Gestionnaire" },
+  ];
 
   useEffect(() => {
     if (competitor) {
@@ -27,7 +34,13 @@ const EditCompetitors = ({ isOpen, onClose, competitor, onSave }) => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`http://localhost:3000/competitors/${competitor.id}`, formData);
+      const token = localStorage.getItem("token");
+      await axios.put(`http://localhost:3000/api/competitors/${competitor.id}`, formData, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      });
       alert("✅ Compétiteur mis à jour !");
       onSave(); // trigger refresh
       onClose();
@@ -55,6 +68,12 @@ const EditCompetitors = ({ isOpen, onClose, competitor, onSave }) => {
             <option value="">Genre</option>
             <option value="H">Homme</option>
             <option value="F">Femme</option>
+          </select>
+          <select name="role" value={formData.role || ''} onChange={handleChange}>
+            <option value="">Rôle</option>
+            {ROLES.map(r => (
+              <option key={r.value} value={r.value}>{r.label}</option>
+            ))}
           </select>
         </div>
         <div className={styles.actions}>

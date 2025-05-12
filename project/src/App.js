@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './App.css';
 import NavBar from './components/navbar/Navbar'
-import Home from './pages/Home/Home';
+import Home from './pages/home/home';
 import Tournaments from './pages/Tournaments/Tournaments'
 import Competitors from "./pages/Competitors/Competitors";
 import TournoiDetails from "./pages/TournoiDetails/ToutnoiDetails"

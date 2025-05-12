@@ -81,7 +81,8 @@ export const TournamentsRoutes = {
                             city: z.string().optional(),
                             start_date: z.coerce.date(),
                             end_date: z.coerce.date().optional(),
-                            age_group_id: z.coerce.number().optional()
+                            age_group_id: z.coerce.number().optional(),
+                            description: z.string()    
 
                         })
                     }
