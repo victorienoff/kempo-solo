@@ -11,7 +11,7 @@ import { buildLoginRouter } from "./login.ts";
 import { buildMailRouter } from "./mail.ts";
 import {  buildPasswordResetRouter } from "./passwordreset.ts";
 
-export const registerAppRoutes = (baseApp: OpenAPIHono<AppEnv>) => {
+export const registerAppRoutes = ((baseApp: OpenAPIHono<AppEnv>) => {
     let app = baseApp.route('/api/tournaments', buildTournamentsRouter())
     app = baseApp.route('', buildLoginRouter())
     app = baseApp.route('',buildMailRouter())
@@ -45,4 +45,4 @@ export const registerAppRoutes = (baseApp: OpenAPIHono<AppEnv>) => {
 
 
     return app
-}
+  }) as any as (baseApp: OpenAPIHono<AppEnv>) => OpenAPIHono<AppEnv>;

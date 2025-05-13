@@ -5,28 +5,16 @@ import { Tournament } from './entities/Tournament.entity.ts';
 import { Migrator } from '@mikro-orm/migrations';
 import { SeedManager } from '@mikro-orm/seeder';
 
-// export default {
-//   dbName: 'kempo_db',
-//   user: 'root',
-//   password: '',
-//   host: 'localhost',
-//   port: 3306, // Port MySQL par défaut
-//   entities: [Tournament],
-//   entitiesTs: ['./src/entities/*.ts'],
-//   driver: MySqlDriver,
-//   allowGlobalContext: true,
-//   extensions: [ Migrator],
-// } as Parameters<typeof MikroORM.init>[0];
-
 export default defineConfig({
+  dynamicImportProvider: id => import(id),
   dbName: 'kempo_db_solo',
   user: 'root',
   password: '',
   host: 'localhost',
   port: 3306, // Port MySQL par défaut
-  entities: [Tournament],
+  entities: ['./src/entities/*.js '],
   entitiesTs: ['./src/entities/*.ts'],
   driver: MySqlDriver,
   allowGlobalContext: true,
-  extensions: [Migrator,SeedManager],
+  extensions: [Migrator, SeedManager],
 }) 
