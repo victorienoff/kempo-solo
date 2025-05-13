@@ -74,7 +74,7 @@ const MatchTablePoule = () => {
   const totalCompetitors = allCompetitorIds.size;
 
   // Afficher le bouton placement SEULEMENT si tous les matchs de classement existent et sont terminés, et 7 compétiteurs ou plus
-  const showPlacementButton = classementMatches.length > 0 && classementMatches.every(match => match.isFinished === true) && totalCompetitors >= 7 && Object.keys(matchesByPoule).length > 0;
+  const showPlacementButton = classementMatches.length == 0 && classementMatches.every(match => match.isFinished === true) && totalCompetitors >= 7 && Object.keys(matchesByPoule).length > 0;
 
   useEffect(() => {
     if (

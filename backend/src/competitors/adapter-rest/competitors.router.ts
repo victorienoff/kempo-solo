@@ -38,6 +38,7 @@ export function buildCompetitorsRouter() {
     })
     
     .openapi(CompetitorsRoutes.get, async (ctx) => {
+       
 
         const { id } = ctx.req.valid('param')
         const em = ctx.get("em");
@@ -61,6 +62,7 @@ export function buildCompetitorsRouter() {
 
     })
         .openapi(CompetitorsRoutes.post, async (ctx) => {
+            
             const body = ctx.req.valid("json")
 
             const em = ctx.get("em");
@@ -77,6 +79,7 @@ export function buildCompetitorsRouter() {
             return ctx.text("Competitor created", 201);
         })
         .openapi(CompetitorsRoutes.put, async (ctx) => {
+            
             const { id } = ctx.req.valid('param')
             const body = ctx.req.valid('json');
 
@@ -103,6 +106,12 @@ export function buildCompetitorsRouter() {
             return ctx.text("Tournament updated", 201);
         })
         .openapi(CompetitorsRoutes.delete, async (ctx) => {
+            const token = ctx.get("authtoken");
+                        const payload = decode(token);
+                        const user = payload?.payload as { id: string, role: string, rights: string[] };
+                        if (!user.rights.includes("userDelete")) {
+                            return ctx.text("Unauthorized", 401)
+                        }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const result = await em.findOne(Competitor, { id })
@@ -128,6 +137,7 @@ export function buildCompetitorsRouter() {
             return ctx.text("Competitor Deleted", 202)
         })
         .openapi(CompetitorsRoutes.getByCategory, async (ctx) => {
+            
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id }, { populate: ['weight_category', 'age_group'] })

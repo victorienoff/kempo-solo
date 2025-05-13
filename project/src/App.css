@@ -3,7 +3,13 @@
   height: 100vh;
 }
 .content{
-  width: 85%;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.contentWithNav {
+  width: 90%;
   height: 100vh;
   overflow-y: auto;
 }

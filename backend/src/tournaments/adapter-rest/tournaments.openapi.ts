@@ -100,7 +100,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
-
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
 
@@ -141,7 +148,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -162,6 +177,14 @@ export const TournamentsRoutes = {
                 content: {
                     'application/json': {
                         schema: z.array(TournamentSchema)
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
                     }
                 }
             },
@@ -195,7 +218,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -236,7 +267,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -277,7 +316,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -303,6 +350,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -346,6 +401,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
     deleteCategory: createRoute({
@@ -375,7 +438,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -413,7 +484,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -446,6 +525,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
     assignCompetitors: createRoute({
@@ -470,6 +557,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Tournament or Category not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -517,6 +612,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         },
     }),
     getCategories: createRoute({
@@ -541,6 +644,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -577,6 +688,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
     startTournament: createRoute({
@@ -601,6 +720,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -638,6 +765,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
     notfinishedMatches: createRoute({
@@ -662,6 +797,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -697,7 +840,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
@@ -723,6 +874,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Category not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -763,6 +922,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
     getBracket: createRoute({
@@ -788,6 +955,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Category not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -825,6 +1000,14 @@ export const TournamentsRoutes = {
                     }
                 }
             },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
         }
     }),
     getCompetitorWithoutCategory: createRoute({
@@ -849,6 +1032,14 @@ export const TournamentsRoutes = {
             },
             404: {
                 description: 'Tournament not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
+            401: {
+                description: 'Unauthorized',
                 content: {
                     "text/plain": {
                         schema: z.string()
@@ -884,7 +1075,15 @@ export const TournamentsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),

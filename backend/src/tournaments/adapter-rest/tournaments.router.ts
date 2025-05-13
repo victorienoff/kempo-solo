@@ -22,6 +22,7 @@ export function buildTournamentsRouter() {
         const payload = decode(token);
         const user = payload?.payload as { id: string, role: string };
 
+
         const result = await em.findOne(Competitor, { id: user.id });
         if (result == null) {
             return ctx.text("Not found", 404);
@@ -57,8 +58,14 @@ export function buildTournamentsRouter() {
         }, 200)
     })
         .openapi(TournamentsRoutes.post, async (ctx) => {
+
             const body = ctx.req.valid("json")
-            console.log(body)
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentCreate")) {
+                return ctx.text("Unauthorized", 401)
+            }
 
             const em = ctx.get("em");
             const result = em.create(Tournament, {
@@ -73,6 +80,12 @@ export function buildTournamentsRouter() {
         .openapi(TournamentsRoutes.put, async (ctx) => {
             const { id } = ctx.req.valid('param')
             const body = ctx.req.valid('json');
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
 
             const em = ctx.get("em");
             const result = await em.findOne(Tournament, { id })
@@ -101,6 +114,12 @@ export function buildTournamentsRouter() {
                 , 200)
         })
         .openapi(TournamentsRoutes.delete, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentCreate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em");
             const result = await em.findOne(Tournament, { id })
@@ -115,6 +134,12 @@ export function buildTournamentsRouter() {
         })
         .openapi(TournamentsRoutes.addCompetitor, async (ctx) => {
             const { id, competitorId } = ctx.req.valid('param')
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
 
 
 
@@ -142,6 +167,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Competitor added to tournament", 201)
         })
         .openapi(TournamentsRoutes.deleteCompetitor, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id,idCompetitor } = ctx.req.valid('param')
 
 
@@ -179,6 +210,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Competitor removed from tournament", 202);
         })
         .openapi(TournamentsRoutes.getCompetitors, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em");
             const tournament = await em.findOne(Tournament, { id }, { populate: ['competitors'] })
@@ -191,6 +228,12 @@ export function buildTournamentsRouter() {
                 , 200)
         })
         .openapi(TournamentsRoutes.createCategory, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const body = ctx.req.valid('json')
 
@@ -207,6 +250,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Category created", 201);
         })
         .openapi(TournamentsRoutes.listCategories, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em");
             const tournament = await em.findOne(Tournament, { id }, { populate: ['competitors'] })
@@ -234,6 +283,12 @@ export function buildTournamentsRouter() {
                 , 200)
         })
         .openapi(TournamentsRoutes.assignCompetitors, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const tournamentCompetitorCategory = await em.find(TournamentCompetitorCategory, { tournament: id }, { populate: ['competitor'] })
@@ -274,6 +329,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Competitors assigned to categories", 200)
         })
         .openapi(TournamentsRoutes.assignCompetitor, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const { categoryId } = ctx.req.valid('param')
             const body = ctx.req.valid('json')
@@ -291,6 +352,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Competitor assigned to category", 200)
         })
         .openapi(TournamentsRoutes.getCategories, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const rawResult = await em.find(Category, { tournament: id }, { populate: ['competitors'] })
@@ -311,6 +378,12 @@ export function buildTournamentsRouter() {
             return ctx.json(result, 200)
         })
         .openapi(TournamentsRoutes.deleteCategory, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id }, { populate: ['weight_category', 'age_group'] })
@@ -321,6 +394,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Category deleted", 202)
         })
         .openapi(TournamentsRoutes.modifyCategory, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const body = ctx.req.valid('json')
             const em = ctx.get("em")
@@ -354,6 +433,12 @@ export function buildTournamentsRouter() {
         })
 
         .openapi(TournamentsRoutes.getCategoryCompetitors, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { categoryId } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id: categoryId }, { populate: ['competitors'] })
@@ -383,6 +468,12 @@ export function buildTournamentsRouter() {
 
         })
         .openapi(TournamentsRoutes.startTournament, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const tournament = await em.findOne(Tournament, { id }, { populate: ['competitors'] })
@@ -453,6 +544,12 @@ export function buildTournamentsRouter() {
 
         })
         .openapi(TournamentsRoutes.startRankingPool, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
                         const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
@@ -551,6 +648,12 @@ export function buildTournamentsRouter() {
            return ctx.text("Ranking pool created", 200)
         })
         .openapi(TournamentsRoutes.notfinishedMatches, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
@@ -581,6 +684,12 @@ export function buildTournamentsRouter() {
             }), 200)
         })
         .openapi(TournamentsRoutes.getMatch, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const match = await em.findOne(Match, { id }, { populate: ['competitor1', 'competitor2'] })
@@ -604,6 +713,12 @@ export function buildTournamentsRouter() {
             }, 200)
         })
         .openapi(TournamentsRoutes.getMatches, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
@@ -635,6 +750,12 @@ export function buildTournamentsRouter() {
 
         })
         .openapi(TournamentsRoutes.getCategoryResults, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
@@ -719,6 +840,12 @@ export function buildTournamentsRouter() {
             }
         })
         .openapi(TournamentsRoutes.getBracket, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param');
             const em = ctx.get("em");
 
@@ -752,6 +879,12 @@ export function buildTournamentsRouter() {
             return ctx.json(bracket, 200);
         })
         .openapi(TournamentsRoutes.deleteCompetitorFromCategory, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const { competitorId } = ctx.req.valid('param')
             const em = ctx.get("em")
@@ -764,6 +897,12 @@ export function buildTournamentsRouter() {
             return ctx.text("Competitor removed from category", 200)
         })
         .openapi(TournamentsRoutes.getCompetitorWithoutCategory, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const tournamentCompetitorCategory = await em.find(TournamentCompetitorCategory, { tournament: id }, { populate: ['competitor'] })
@@ -777,6 +916,12 @@ export function buildTournamentsRouter() {
             return ctx.json(competitors, 200)
         })
         .openapi(TournamentsRoutes.getCategory, async (ctx) => {
+            const token = ctx.get("authtoken");
+            const payload = decode(token);
+            const user = payload?.payload as { id: string, role: string, rights: string[] };
+            if (!user.rights.includes("tournamentUpdate")) {
+                return ctx.text("Unauthorized", 401)
+            }
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
             const category = await em.findOne(Category, { id }, { populate: ['competitors'] })

@@ -22,16 +22,16 @@ function App() {
         <Route path='/telecommande' element={<div className='content'><Telecommande /></div>}></Route>
         <Route path='/scoreboard' element={<div className='content'><Scoreboard /></div>}></Route>
         {/* Pages sans navbar ni auth */}
-        <Route path='/' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Home /></div></div></>}></Route>
-        <Route path='/tournaments' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Tournaments /></div></div></>}></Route>
-        <Route path='/competiteurs' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Competitors /></div></div></>}></Route>
-        <Route path='/tournoiDetails/:id' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><TournoiDetails /></div></div></>}></Route>
-        <Route path="/tournoiDetails/:id/ajouter-competiteurs" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><AddCompetitorsToCategory /></div></div></>}/>
-        <Route path="/matches/:categoryId" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><MatchesTable /></div></div></>}/>
-        <Route path="/login" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Login /></div></div></>}></Route>
-        <Route path="/profile" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Profile /></div></div></>}/>
-        <Route path="/signup" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Signup /></div></div></>}/>
-        <Route path="/passwordreset/:token" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><PasswordReset /></div></div></>}/>
+        <Route path='/' element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><Home /></div></div></>}></Route>
+        <Route path='/tournaments' element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><Tournaments /></div></div></>}></Route>
+        <Route path='/competiteurs' element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><Competitors /></div></div></>}></Route>
+        <Route path='/tournoiDetails/:id' element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><TournoiDetails /></div></div></>}></Route>
+        <Route path="/tournoiDetails/:id/ajouter-competiteurs" element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><AddCompetitorsToCategory /></div></div></>}/>
+        <Route path="/matches/:categoryId" element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><MatchesTable /></div></div></>}/>
+        <Route path="/login" element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><Login /></div></div></>}></Route>
+        <Route path="/profile" element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><Profile /></div></div></>}/>
+        <Route path="/signup" element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><Signup /></div></div></>}/>
+        <Route path="/passwordreset/:token" element={<><AuthButtons /><div className='App'><NavBar /><div className='contentWithNav'><PasswordReset /></div></div></>}/>
       </Routes>
     </Router>
   );

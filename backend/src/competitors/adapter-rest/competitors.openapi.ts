@@ -29,7 +29,8 @@ export const CompetitorsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            
 
         }
     }),
@@ -46,7 +47,8 @@ export const CompetitorsRoutes = {
                         schema: CompetitorSchemaCreate
                     }
                 }
-            }
+            },
+            
         },
         headers: new Headers({ 'Content-Type': 'application/json' }),
 
@@ -131,7 +133,15 @@ export const CompetitorsRoutes = {
                         schema: z.string()
                     }
                 }
-            }
+            },
+            401: {
+                description: 'Unauthorized',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            },
 
         }
     }),
