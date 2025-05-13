@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './App.css';
 import NavBar from './components/navbar/Navbar'
-import Home from './pages/Home/home';
+import Home from './pages/home/home';
 import Tournaments from './pages/Tournaments/Tournaments'
 import Competitors from "./pages/Competitors/Competitors";
 import TournoiDetails from "./pages/TournoiDetails/ToutnoiDetails"
@@ -25,9 +25,9 @@ function App() {
         <Route path='/' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Home /></div></div></>}></Route>
         <Route path='/tournaments' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Tournaments /></div></div></>}></Route>
         <Route path='/competiteurs' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Competitors /></div></div></>}></Route>
-        <Route path='/tournoiDetails/:id' element={<><AuthButtons /><div className='App'><NavBar /><TournoiDetails /></div></>}></Route>
-        <Route path="/tournoiDetails/:id/ajouter-competiteurs" element={<><AuthButtons /><div className='App'><NavBar /><AddCompetitorsToCategory /></div></>}/>
-        <Route path="/matches/:categoryId" element={<><AuthButtons /><div className='App'><NavBar /><MatchesTable /></div></>}/>
+        <Route path='/tournoiDetails/:id' element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><TournoiDetails /></div></div></>}></Route>
+        <Route path="/tournoiDetails/:id/ajouter-competiteurs" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><AddCompetitorsToCategory /></div></div></>}/>
+        <Route path="/matches/:categoryId" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><MatchesTable /></div></div></>}/>
         <Route path="/login" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Login /></div></div></>}></Route>
         <Route path="/profile" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Profile /></div></div></>}/>
         <Route path="/signup" element={<><AuthButtons /><div className='App'><NavBar /><div className='content'><Signup /></div></div></>}/>

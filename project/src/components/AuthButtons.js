@@ -10,6 +10,7 @@ function AuthButtons() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user_rights"); // Supprime aussi les droits à la déconnexion
     window.location.reload();
   };
 

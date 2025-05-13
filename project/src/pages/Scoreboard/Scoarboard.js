@@ -88,9 +88,9 @@ const Scoreboard = () => {
       <div className={`${styles.player} ${styles.red}`} style={{position: 'relative', fontWeight: 'bold', fontSize: '2vw', letterSpacing: 1}}>
         <div className={styles["player-info"]}>
           <div className={styles.flag}></div>
-          <div className={styles.names}>
+          <div className={styles.names} style={{display: 'flex', flexDirection: 'column'}}>
             <strong style={{fontSize: '2vw', fontWeight: 'bold'}}>{competitor1.name}</strong>
-            <span style={{fontSize: '1.3vw', fontWeight: 'bold'}}>{competitor1.club}</span>
+            <span style={{fontSize: '1.3vw', fontWeight: 'bold', marginTop: '0.2vw'}}>{competitor1.club}</span>
           </div>
         </div>
         <div style={{display: 'flex', alignItems: 'center', gap: '0.5vw'}}>
@@ -103,9 +103,9 @@ const Scoreboard = () => {
       <div className={`${styles.player} ${styles.white}`} style={{position: 'relative', fontWeight: 'bold', fontSize: '2vw', letterSpacing: 1}}>
         <div className={styles["player-info"]}>
           <div className={styles.flag}></div>
-          <div className={styles.names}>
+          <div className={styles.names} style={{display: 'flex', flexDirection: 'column'}}>
             <strong style={{fontSize: '2vw', fontWeight: 'bold'}}>{competitor2.name}</strong>
-            <span style={{fontSize: '1.3vw', fontWeight: 'bold'}}>{competitor2.club}</span>
+            <span style={{fontSize: '1.3vw', fontWeight: 'bold', marginTop: '0.2vw'}}>{competitor2.club}</span>
           </div>
         </div>
         <div style={{display: 'flex', alignItems: 'center', gap: '0.5vw'}}>

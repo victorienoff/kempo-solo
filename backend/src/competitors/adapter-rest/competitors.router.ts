@@ -5,6 +5,7 @@ import { Competitor, EnumRole } from "../../entities/Competitor.entity.ts";
 import { CompetitorsRoutes } from "./competitors.openapi.ts";
 import type { FilterQuery } from "@mikro-orm/core";
 import { decode } from "hono/jwt";
+import { EnumRank } from "../../entities/Tournament.entity.ts";
 
 export function buildCompetitorsRouter() {
     const router = getApp()
@@ -110,7 +111,19 @@ export function buildCompetitorsRouter() {
             if (result == null) {
                 return ctx.text("Not found", 404);
             }
-            em.nativeDelete(Competitor, { id })
+
+            
+            result.firstname = "deleted"
+            result.lastname = "deleted"
+            result.birthday = new Date(0)
+            result.club = "deleted"
+            result.country = "deleted"
+            result.weight = 0
+            result.rank = EnumRank.WHITE
+            result.email = result.id + "@deleted.com"
+
+            em.persist(result)
+            await em.flush();
 
             return ctx.text("Competitor Deleted", 202)
         })

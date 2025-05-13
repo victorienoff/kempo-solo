@@ -23,12 +23,30 @@ const Telecommande = () => {
   const [faults1, setFaults1] = useState(() => getInitialNumber("scoreboard_faults1", 0));
   const [faults2, setFaults2] = useState(() => getInitialNumber("scoreboard_faults2", 0));
   const [timer, setTimer] = useState(() => getInitialNumber("scoreboard_timer", 180));
-  const [isRunning, setIsRunning] = useState(() => {
-    const running = localStorage.getItem("scoreboard_timer_running");
-    return running === "true";
-  });
+  const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
   const audioRef = useRef(null);
+
+  // Réinitialise les scores à 0 si l'URL contient ?reset (ex: ouverture depuis la navbar)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('reset')) {
+      setScore1(0);
+      setScore2(0);
+      setFaults1(0);
+      setFaults2(0);
+      setTimer(180);
+      setCompetitor1({ name: '', club: '' });
+      setCompetitor2({ name: '', club: '' });
+      localStorage.setItem('scoreboard_score1', 0);
+      localStorage.setItem('scoreboard_score2', 0);
+      localStorage.setItem('scoreboard_faults1', 0);
+      localStorage.setItem('scoreboard_faults2', 0);
+      localStorage.setItem('scoreboard_timer', 180);
+      localStorage.setItem('scoreboard_competitor1', JSON.stringify({ name: '', club: '' }));
+      localStorage.setItem('scoreboard_competitor2', JSON.stringify({ name: '', club: '' }));
+    }
+  }, []);
 
   // Sauvegarde dans le localStorage à chaque modification
   useEffect(() => {
@@ -56,31 +74,70 @@ const Telecommande = () => {
 
   // Ouvre la fenêtre scoreboard si besoin et garde la référence
   useEffect(() => {
-    // Empêche l'ouverture automatique si déjà ouvert par MatchesTable
-    if (!window.location.pathname.includes('scoreboard') && !window.location.search.includes('reload')) {
-      if (!window.scoreboardWindow || window.scoreboardWindow.closed) {
-        try {
-          window.scoreboardWindow = window.open(
-            window.location.origin + '/scoreboard',
-            '_blank',
-            'noopener,noreferrer,width=1000,height=700,left=950,top=100'
-          );
-          if (!window.scoreboardWindow) {
-            alert('Impossible d\'ouvrir la fenêtre scoreboard. Veuillez autoriser les popups pour ce site.');
-          } else {
-            localStorage.setItem('scoreboard_opened', 'true');
-            const timer = setInterval(() => {
-              if (window.scoreboardWindow && window.scoreboardWindow.closed) {
-                localStorage.setItem('scoreboard_opened', 'false');
-                clearInterval(timer);
-              }
-            }, 1000);
+    if (window.location.pathname.includes('scoreboard') || window.location.search.includes('reload')) return;
+    const channel = new BroadcastChannel('scoreboard_channel');
+    let dejaOuvertRecu = false;
+    let ouvertureAutorisee = true;
+    let verrouPose = false;
+    const VERROU_KEY = 'scoreboard_open_lock';
+    const VERROU_TTL = 5000; // 5 secondes
+    const now = Date.now();
+
+    // Handler unique pour tous les messages
+    channel.onmessage = (event) => {
+      if (event.data === 'deja_ouvert' || event.data === 'ouvert') {
+        dejaOuvertRecu = true;
+        ouvertureAutorisee = false;
+      }
+      if (event.data === 'demande_ouverture' && localStorage.getItem('scoreboard_opened') === 'true') {
+        channel.postMessage('deja_ouvert');
+      }
+    };
+
+    channel.postMessage('demande_ouverture');
+
+    setTimeout(() => {
+      // Vérification du verrou atomique
+      const verrou = localStorage.getItem(VERROU_KEY);
+      if (!verrou || now - Number(verrou) > VERROU_TTL) {
+        // Pose le verrou
+        localStorage.setItem(VERROU_KEY, String(now));
+        verrouPose = true;
+      }
+      // Relit le verrou pour voir qui l'a posé en premier
+      const verrouFinal = localStorage.getItem(VERROU_KEY);
+      if (verrouPose && String(now) === verrouFinal && ouvertureAutorisee && !dejaOuvertRecu) {
+        if (!window.scoreboardWindow || window.scoreboardWindow.closed) {
+          try {
+            window.scoreboardWindow = window.open(
+              window.location.origin + '/scoreboard',
+              '_blank',
+              'noopener,noreferrer,width=1000,height=700,left=950,top=100'
+            );
+            if (!window.scoreboardWindow) {
+            } else {
+              localStorage.setItem('scoreboard_opened', 'true');
+              channel.postMessage('ouvert');
+              const timer = setInterval(() => {
+                if (window.scoreboardWindow && window.scoreboardWindow.closed) {
+                  localStorage.setItem('scoreboard_opened', 'false');
+                  channel.postMessage('ferme');
+                  clearInterval(timer);
+                  // Libère le verrou
+                  localStorage.removeItem(VERROU_KEY);
+                }
+              }, 1000);
+            }
+          } catch (e) {
+            alert('Erreur lors de l\'ouverture de la fenêtre scoreboard : ' + e.message);
           }
-        } catch (e) {
-          alert('Erreur lors de l\'ouverture de la fenêtre scoreboard : ' + e.message);
         }
       }
-    }
+    }, 200);
+
+    return () => {
+      channel.close();
+    };
   }, []);
 
   // Gestion du timer
@@ -170,12 +227,15 @@ const Telecommande = () => {
             value={competitor1.name}
             onChange={e => setCompetitor1({ ...competitor1, name: e.target.value })}
             style={{ fontWeight: 'bold', fontSize: '1.5rem', marginBottom: 4 }}
+            placeholder="Nom du compétiteur"
           />
+          <label style={{fontSize: '0.95rem', marginTop: 2, marginBottom: 0, color: '#aaa'}}>Club</label>
           <input
             type="text"
             value={competitor1.club}
             onChange={e => setCompetitor1({ ...competitor1, club: e.target.value })}
             style={{ fontSize: '1rem' }}
+            placeholder="Nom du club"
           />
         </div>
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'flex-end', margin: '8px 0 4px 0', gap: 80}}>
@@ -205,12 +265,15 @@ const Telecommande = () => {
             value={competitor2.name}
             onChange={e => setCompetitor2({ ...competitor2, name: e.target.value })}
             style={{ fontWeight: 'bold', fontSize: '1.5rem', marginBottom: 4 }}
+            placeholder="Nom du compétiteur"
           />
+          <label style={{fontSize: '0.95rem', marginTop: 2, marginBottom: 0, color: '#aaa'}}>Club</label>
           <input
             type="text"
             value={competitor2.club}
             onChange={e => setCompetitor2({ ...competitor2, club: e.target.value })}
             style={{ fontSize: '1rem' }}
+            placeholder="Nom du club"
           />
         </div>
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'flex-end', margin: '8px 0 4px 0', gap: 80}}>

@@ -1,9 +1,17 @@
 import React from "react";
 import styles from "./RankingTable.module.css"; 
 
-const RankingTable = ({ rankings = [] }) => { 
+const RankingTable = ({ rankings = [], podium = {} }) => { 
   if (!Array.isArray(rankings) || rankings.length === 0) {
     return <p className={styles.noData}>Aucun classement disponible.</p>;   
+  }
+
+  // Création d'un mapping id -> place pour le podium
+  const podiumMap = {};
+  if (podium && typeof podium === 'object') {
+    if (podium.first) podiumMap[podium.first] = '🥇';
+    if (podium.second) podiumMap[podium.second] = '🥈';
+    if (podium.third) podiumMap[podium.third] = '🥉';
   }
 
   return (
@@ -15,26 +23,21 @@ const RankingTable = ({ rankings = [] }) => {
             <th>Position</th>
             <th>Nom</th>
             <th>Prénom</th>
-            <th>Ippon</th>
-            <th>Kekkou</th>
-            <th>Points</th>
           </tr>
         </thead>
         <tbody>
           {rankings?.map((player, index) => {  
             let rowClass = "";
-            if (index === 0) rowClass = styles.gold;
-            else if (index === 1) rowClass = styles.silver;
-            else if (index === 2) rowClass = styles.bronze;
+            let place = podiumMap[player?.id] || `#${index + 1}`;
+            if (podiumMap[player?.id] === '🥇') rowClass = styles.gold;
+            else if (podiumMap[player?.id] === '🥈') rowClass = styles.silver;
+            else if (podiumMap[player?.id] === '🥉') rowClass = styles.bronze;
 
             return (
-              <tr key={index} className={rowClass}>
-                <td>{index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index + 1}`}</td>
+              <tr key={player?.id || index} className={rowClass}>
+                <td>{place}</td>
                 <td>{player?.name || "N/A"}</td>
                 <td>{player?.surname || "N/A"}</td>
-                <td>{player?.ippon || 0}</td>
-                <td>{player?.kekkou || 0}</td>
-                <td>{player?.points || 0}</td>
               </tr>
             );
           })}

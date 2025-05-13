@@ -856,7 +856,38 @@ export const TournamentsRoutes = {
                 }
             },
         }
-    })
+    }),
+    getCategory: createRoute({
+        method: 'get',
+        path: '/categories/{id}',
+        tags: ['Categories'],
+        summary: 'Get one category',
+        description: 'Get one category by ID',
+        request: {
+            params: z.object({
+                id: z.string().uuid()
+            })
+        },
+        responses: {
+            200: {
+                description: 'Details of the category',
+                content: {
+                    'application/json': {
+                        schema: CategorySchema
+                    }
+                }
+            },
+            404: {
+                description: 'Category not found',
+                content: {
+                    "text/plain": {
+                        schema: z.string()
+                    }
+                }
+            }
+
+        }
+    }),
 
 
 

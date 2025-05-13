@@ -4,7 +4,7 @@ import styles from "./CompetitorsTable.module.css";
 import Filter from "./Filter";
 import EditCompetitors from "./EditCompetitors";
 
-const CompetitorTable = () => {
+const CompetitorTable = (props) => {
   const [competitors, setCompetitors] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -67,7 +67,9 @@ const CompetitorTable = () => {
     }
   };
 
+  // Filtrer les compétiteurs dont le nom est 'deleted' si hideDeleted est activé
   const filteredCompetitors = competitors.filter((c) => {
+    if (props.hideDeleted && c.lastname && c.lastname.toLowerCase() === 'deleted') return false;
     const fullName = `${c.firstname} ${c.lastname}`.toLowerCase();
     const matchesName = fullName.includes(searchQuery.toLowerCase());
     const matchesDate = !selectedDate || (c.birthday && c.birthday.startsWith(selectedDate));

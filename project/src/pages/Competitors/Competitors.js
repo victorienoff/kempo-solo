@@ -8,8 +8,7 @@ function Competitors(){
         <div className={styles.competitorsContainer}>
         <AuthButtons />
         <h1 className={styles.title}>Liste des Compétiteurs</h1>
-
-        <CompetiteursTable />
+        <CompetiteursTable hideDeleted={true} />
     </div>
     )
 }

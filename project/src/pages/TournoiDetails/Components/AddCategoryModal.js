@@ -16,6 +16,7 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
   const [ageGroupId, setAgeGroupId] = useState("");
   const [weightCategories, setWeightCategories] = useState([]);
   const [ageGroups, setAgeGroups] = useState([]);
+  const [eliminationType, setEliminationType] = useState("Directe");
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -59,7 +60,8 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
       grades: selectedGrades,
       gender,
       weight_category_id: parseInt(weightCategoryId),
-      age_group_id: parseInt(ageGroupId)
+      age_group_id: parseInt(ageGroupId),
+      elimination_type: eliminationType
     });
 
     onClose();
@@ -155,6 +157,18 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
                   {grp.name} ({grp.age_min} - {grp.age_max} ans)
                 </option>
               ))}
+            </select>
+          </label>
+
+          <label>
+            Type d'élimination *
+            <select
+              value={eliminationType}
+              onChange={(e) => setEliminationType(e.target.value)}
+              required
+            >
+              <option value="Directe">Élimination directe</option>
+              <option value="Poule">Poule</option>
             </select>
           </label>
 

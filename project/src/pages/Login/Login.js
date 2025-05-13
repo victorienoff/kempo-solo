@@ -30,6 +30,19 @@ function Login() {
         return;
       }
       localStorage.setItem("token", data.token);
+      // Décoder le token pour extraire les droits et les stocker
+      try {
+        // Utilisation de jwt-decode (doit être installé dans le projet)
+        // eslint-disable-next-line
+        const decoded = window.jwt_decode ? window.jwt_decode(data.token) : require("jwt-decode")(data.token);
+        if (decoded && decoded.rights) {
+          localStorage.setItem("user_rights", JSON.stringify(decoded.rights));
+        } else {
+          localStorage.removeItem("user_rights");
+        }
+      } catch (e) {
+        localStorage.removeItem("user_rights");
+      }
       navigate("/", { state: { token: data.token } });
     } catch (err) {
       setError("Erreur réseau ou serveur.");

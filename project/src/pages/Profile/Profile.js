@@ -43,7 +43,7 @@ function Profile() {
       });
 
     // Récupération des ranks
-    fetch("http://localhost:3000/ranks")
+    fetch("http://localhost:3000/api/ranks")
       .then((res) => res.json())
       .then((data) => setRanks(data))
       .catch(() => setRanks([]));
@@ -200,26 +200,35 @@ function Profile() {
                 </tr>
               </thead>
               <tbody>
-                {myTournaments.map((t) => (
-                  <tr key={t.id}>
-                    <td>{t.name}</td>
-                    <td>{
-                      t.start_date && !isNaN(Date.parse(t.date))
-                        ? new Date(t.start_date).toLocaleDateString()
-                        : (t.start_date?.split("T")[0] || '-')
-                    }</td>
-                    <td>{t.city || '-'}</td>
-                    <td>
-                      <button
-                        className="register-btn-red"
-                        style={{background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', padding: '6px 12px', cursor: 'pointer'}}
-                        onClick={() => handleUnregister(t.id)}
-                      >
-                        Se désinscrire
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {myTournaments.map((t) => {
+                  // Vérifier si le tournoi est passé
+                  const today = new Date();
+                  today.setHours(0,0,0,0);
+                  const tournoiDate = t.start_date ? new Date(t.start_date) : null;
+                  const isFutureOrToday = tournoiDate && tournoiDate >= today;
+                  return (
+                    <tr key={t.id}>
+                      <td>{t.name}</td>
+                      <td>{
+                        t.start_date && !isNaN(Date.parse(t.date))
+                          ? new Date(t.start_date).toLocaleDateString()
+                          : (t.start_date?.split("T")[0] || '-')
+                      }</td>
+                      <td>{t.city || '-'}</td>
+                      <td>
+                        {isFutureOrToday && (
+                          <button
+                            className="register-btn-red"
+                            style={{background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', padding: '6px 12px', cursor: 'pointer'}}
+                            onClick={() => handleUnregister(t.id)}
+                          >
+                            Se désinscrire
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -10,6 +10,9 @@ const TournoiDetails = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [categoryCompetitorCounts, setCategoryCompetitorCounts] = useState({});
+  const [ageGroups, setAgeGroups] = useState({});
+  const [weightCategories, setWeightCategories] = useState({});
 
   const fetchCategories = async () => {
     try {
@@ -25,6 +28,49 @@ const TournoiDetails = () => {
         axiosConfig
       );
       setCategories(res.data);
+      // Pour chaque catégorie, charger le nombre de compétiteurs
+      const counts = {};
+      const ageGroupIds = new Set();
+      const weightCategoryIds = new Set();
+      res.data.forEach(cat => {
+        if (cat.age_group) ageGroupIds.add(cat.age_group);
+        if (cat.weight_category) weightCategoryIds.add(cat.weight_category);
+      });
+      await Promise.all(res.data.map(async (cat) => {
+        try {
+          const resp = await axios.get(
+            `http://localhost:3000/api/tournaments/categories/${cat.id}/competitors`,
+            axiosConfig
+          );
+          counts[cat.id] = Array.isArray(resp.data) ? resp.data.length : 0;
+        } catch {
+          counts[cat.id] = 0;
+        }
+      }));
+      setCategoryCompetitorCounts(counts);
+      // Fetch all unique age groups
+      const ageGroupMap = {};
+      await Promise.all(Array.from(ageGroupIds).map(async (id) => {
+        try {
+          const resp = await axios.get(`http://localhost:3000/api/age-groups/${id}`, axiosConfig);
+          ageGroupMap[id] = resp.data?.name ? resp.data : null;
+        } catch {
+          ageGroupMap[id] = null;
+        }
+      }));
+      setAgeGroups(ageGroupMap);
+      // Fetch all unique weight categories
+      const weightCategoryMap = {};
+      await Promise.all(Array.from(weightCategoryIds).map(async (id) => {
+        try {
+          const resp = await axios.get(`http://localhost:3000/api/weight-categories/${id}`, axiosConfig);
+          // L'API retourne un tableau
+          weightCategoryMap[id] = Array.isArray(resp.data) ? resp.data[0] : resp.data;
+        } catch {
+          weightCategoryMap[id] = null;
+        }
+      }));
+      setWeightCategories(weightCategoryMap);
     } catch (err) {
       console.error("Erreur chargement catégories :", err);
     }
@@ -50,9 +96,9 @@ const TournoiDetails = () => {
         rank: categoryData.grades,
         gender: categoryData.gender,
         weight_category: categoryData.weight_category_id,
-        elimination_type: "Directe",
+        elimination_type: categoryData.elimination_type, // Utilise la valeur du formulaire
         age_group: categoryData.age_group_id,
-      }
+      };
 
       await axios.post(
         `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
@@ -100,6 +146,24 @@ const TournoiDetails = () => {
     } catch (err) {
       console.error("❌ Erreur insertion test :", err.response?.data || err.message);
       alert("Erreur d'insertion test. Voir la console.");
+    }
+  };
+
+  const handleDeleteCategory = async (categoryId) => {
+    if (!window.confirm("Supprimer cette catégorie ?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
+        }
+      };
+      await axios.delete(`http://localhost:3000/api/tournaments/categories/${categoryId}`, axiosConfig);
+      alert("Catégorie supprimée");
+      fetchCategories();
+    } catch (err) {
+      alert("Erreur lors de la suppression");
     }
   };
 
@@ -161,13 +225,18 @@ const TournoiDetails = () => {
               <tr key={i}>
                 <td>{cat.rank?.join(", ")}</td>
                 <td>{cat.gender}</td>
-                <td>{cat.weight_category?.name || "-"}</td>
-                <td>{cat.age_group?.name || "-"}</td>
+                <td>{cat.weight_category && weightCategories[cat.weight_category] ? `${weightCategories[cat.weight_category].name} (${weightCategories[cat.weight_category].weight_min}kg - ${weightCategories[cat.weight_category].weight_max}kg)` : "-"}</td>
+                <td>{cat.age_group && ageGroups[cat.age_group] ? `${ageGroups[cat.age_group].name} (${ageGroups[cat.age_group].age_min} - ${ageGroups[cat.age_group].age_max} ans)` : "-"}</td>
                 <td>{cat.elimination_type}</td>
                 <td>
                   <button onClick={() => goToAddCompetitorsPage(cat.id)}>
                     ➕ Afficher les compétiteurs
                   </button>
+                  {categoryCompetitorCounts[cat.id] === 0 && (
+                    <button style={{marginLeft:8, background:'#dc3545', color:'#fff'}} onClick={() => handleDeleteCategory(cat.id)}>
+                      🗑️ Supprimer
+                    </button>
+                  )}
                 </td>
               </tr>
             ))

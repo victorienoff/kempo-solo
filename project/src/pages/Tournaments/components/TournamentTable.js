@@ -263,21 +263,30 @@ const TournoiTable = () => {
                       <button className={styles["details-btn"]}>Voir Détails</button>
                     </Link>
                   )}
-                  {userRole && (myTournaments.includes(comp.id) ? (
-                    <button
-                      className={styles["register-btn-red"]}
-                      onClick={() => handleUnregister(comp.id)}
-                    >
-                      Se désinscrire
-                    </button>
-                  ) : (
-                    <button
-                      className={styles["register-btn-green"]}
-                      onClick={() => handleRegister(comp.id)}
-                    >
-                      S'inscrire
-                    </button>
-                  ))}
+                  {/* Afficher les boutons inscription/désinscription seulement si le tournoi n'est pas passé */}
+                  {(() => {
+                    const today = new Date();
+                    today.setHours(0,0,0,0);
+                    const tournoiDate = comp.start_date ? new Date(comp.start_date) : null;
+                    if (tournoiDate && tournoiDate >= today) {
+                      return userRole && (myTournaments.includes(comp.id) ? (
+                        <button
+                          className={styles["register-btn-red"]}
+                          onClick={() => handleUnregister(comp.id)}
+                        >
+                          Se désinscrire
+                        </button>
+                      ) : (
+                        <button
+                          className={styles["register-btn-green"]}
+                          onClick={() => handleRegister(comp.id)}
+                        >
+                          S'inscrire
+                        </button>
+                      ));
+                    }
+                    return null;
+                  })()}
                 </div>
               </div>
             ))

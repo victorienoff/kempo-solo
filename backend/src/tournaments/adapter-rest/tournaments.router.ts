@@ -455,22 +455,27 @@ export function buildTournamentsRouter() {
         .openapi(TournamentsRoutes.startRankingPool, async (ctx) => {
             const { id } = ctx.req.valid('param')
             const em = ctx.get("em")
-            const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
+                        const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
+    
             if (category == null) {
                 return ctx.text("Not found", 404);
             }
+            
             const matches = await em.find(Match, { category: id }, { populate: ['competitor1', 'competitor2'] })
-
+            
             matches.forEach((match) => {
                 if (!match.isFinished) {
+                    
                     return ctx.text("Not all matches are finished", 404);
                 }
             })
-
+            
+            
             const competitors = await em.find(TournamentCompetitorCategory, { category: id }, { populate: ['competitor'] })
             if (competitors == null) {
                 return ctx.text("No competitor in this category", 404);
             }
+            
 
             let competitorsResult = competitors.map(tc => ({
                 ...(tc.competitor as Competitor & { score: number; pool_number: string })
@@ -504,65 +509,45 @@ export function buildTournamentsRouter() {
                 return 0
             })
 
+            // Regrouper les compétiteurs par pool_number
+            const pools: Record<string, typeof competitorsResult> = {};
+            for (const competitor of competitorsResult) {
+                if (!competitor.pool_number) continue;
+                if (!pools[competitor.pool_number]) pools[competitor.pool_number] = [];
+                pools[competitor.pool_number].push(competitor);
+            }
+            // Trier chaque pool par score décroissant
+            Object.values(pools).forEach(pool => pool.sort((a, b) => b.score - a.score));
+
+            // Récupérer dynamiquement le premier et le deuxième de chaque pool (hors pools de classement)
+            const poolKeys = Object.keys(pools).filter(k => !k.startsWith("0"));
+            const topCompetitors: Competitor[] = [];
+            const secondCompetitors: Competitor[] = [];
+            for (const key of poolKeys) {
+                if (pools[key] && pools[key][0]) {
+                    topCompetitors.push(pools[key][0]);
+                }
+                if (pools[key] && pools[key][1]) {
+                    secondCompetitors.push(pools[key][1]);
+                }
+            }
+
+            if (topCompetitors.length === 0) {
+                return ctx.text("No ranking pool needing", 404);
+            }
+
+            if (topCompetitors.length === 2) {
+                // 2 poules : 1er vs 1er (0-1), 2e vs 2e (0-3)
+                createPoolMatches([topCompetitors[0], topCompetitors[1]], category, ctx, "0-1");
+                if (secondCompetitors.length === 2) {
+                    createPoolMatches([secondCompetitors[0], secondCompetitors[1]], category, ctx, "0-3");
+                }
+            } else if (topCompetitors.length >= 3) {
+                // 3 ou 4 poules : tous les 1ers dans une poule (0-1)
+                createPoolMatches(topCompetitors, category, ctx, "0-1");
+            }
+
            
-    
-            const competitorsResultFiltered1 = competitorsResult.filter((competitor) => {
-                return competitor.pool_number == "1"
-            })
-            const competitorsResultFiltered2 = competitorsResult.filter((competitor) => {
-                return competitor.pool_number == "2"
-            })
-            const competitorsResultFiltered3 = competitorsResult.filter((competitor) => {
-                return competitor.pool_number == "3"
-            })
-            const competitorsResultFiltered4 = competitorsResult.filter((competitor) => {
-                return competitor.pool_number == "4"
-            })
-        
-            if (competitorsResultFiltered1.length != 0) {
-                return ctx.text("No ranking pool needing", 404)
-            }
-
-            if (competitorsResultFiltered4.length != 0) {
-                const comptop : Competitor[] = []
-                comptop.push(competitorsResultFiltered4[0])
-                comptop.push(competitorsResultFiltered3[0])
-                comptop.push(competitorsResultFiltered2[0])
-                comptop.push(competitorsResultFiltered1[0])
-
-                createPoolMatches(comptop, category, ctx, "0-1")
-
-            }else if (competitorsResultFiltered3.length != 0) {
-                const comptop : Competitor[] = []
-                comptop.push(competitorsResultFiltered3[0])
-                comptop.push(competitorsResultFiltered2[0])
-                comptop.push(competitorsResultFiltered1[0])
-
-                createPoolMatches(comptop, category, ctx, "0-1")
-
-            }else if (competitorsResultFiltered2.length != 0) {
-                const  match1 = em.create(Match, {
-                    competitor1: competitorsResultFiltered1[0],
-                    competitor2: competitorsResultFiltered1[1],
-                    category: category.id,
-                    pool_number: "0-1"
-                })
-
-                await em.persistAndFlush(match1);
-
-                const match2 = em.create(Match, {
-                    competitor1: competitorsResultFiltered1[2],
-                    competitor2: competitorsResultFiltered1[3],
-                    category: category.id,
-                    pool_number: "0-3"
-                })
-
-                await em.persistAndFlush(match2);
-            }
-
-
-
-           console.log(competitorsResultFiltered2)
            return ctx.text("Ranking pool created", 200)
         })
         .openapi(TournamentsRoutes.notfinishedMatches, async (ctx) => {
@@ -659,14 +644,14 @@ export function buildTournamentsRouter() {
 
             const matches = await em.find(Match, { category: id, pool_number: ["0","0-1","0-3"] }, { populate: ['competitor1', 'competitor2'] })
 
-            matches.forEach((match) => {
+            for (const match of matches) {
                 if (!match.isFinished) {
                     return ctx.text("Not all matches are finished", 404);
                 }
-            })
+            }
 
             const competitors = await em.find(TournamentCompetitorCategory, { category: id }, { populate: ['competitor'] })
-            if (competitors == null) {
+            if (!competitors || competitors.length === 0) {
                 return ctx.text("No competitor in this category", 404);
             }
 
@@ -674,84 +659,64 @@ export function buildTournamentsRouter() {
                 let competitorsResult = competitors.map(tc => ({
                     ...(tc.competitor as Competitor & { score: number; pool_number: string })
                 }));
-    
+
                 for (const competitor of competitorsResult) {
-                    
-                    
                     competitor.score = 0
-                    
+                    competitor.pool_number = "";
                     for (const match of matches) {
-                        
                         if (match.winner != null) {
                             if (match.winner.id == competitor.id ) {
                                 competitor.score += 2
                                 competitor.pool_number = match.pool_number   
-                            }else if (match.competitor1.id == competitor.id || match.competitor2.id ==competitor.id) {
+                            } else if (match.competitor1.id == competitor.id || match.competitor2.id ==competitor.id) {
                                 competitor.pool_number = match.pool_number
                             }
-                            
-                        }else if (match.competitor1.id == competitor.id || match.competitor2.id == competitor.id) {
+                        } else if (match.competitor1.id == competitor.id || match.competitor2.id == competitor.id) {
                             competitor.score += 1
                             competitor.pool_number = match.pool_number
-    
                         }
                     }
                 }
-                competitorsResult.sort((a, b) => {
-                    if (a.score > b.score) return -1
-                    if (a.score < b.score) return 1
-                    return 0
-                })
-    
-               
-        
-                const competitorsResultFiltered03 = competitorsResult.filter((competitor) => {
-                    return competitor.pool_number == "0-3"
-                })
-                const competitorsResultFiltered01 = competitorsResult.filter((competitor) => {
-                    return competitor.pool_number == "0-1"
-                })
-                const competitorsResultFiltered0 = competitorsResult.filter((competitor) => {
-                    return competitor.pool_number == "0"
-                })
-    
-    
-                const comptop : Competitor[] = []
-                if (competitorsResultFiltered03.length != 0) {
-                    
-                    comptop.push(competitorsResultFiltered01[0])
-                    comptop.push(competitorsResultFiltered01[1])
-                    comptop.push(competitorsResultFiltered03[0])
-    
-    
-                }else if (competitorsResultFiltered01.length != 0) {
-    
-                    comptop.push(competitorsResultFiltered01[0])
-                    comptop.push(competitorsResultFiltered01[1])
-                    comptop.push(competitorsResultFiltered01[2])
-                }else if (competitorsResultFiltered0.length != 0) {
-                    comptop.push(competitorsResultFiltered0[0])
-                    comptop.push(competitorsResultFiltered0[1])
-                    comptop.push(competitorsResultFiltered0[2])
+
+                competitorsResult.sort((a, b) => b.score - a.score);
+
+                // Filtrage par pool_number
+                const competitorsResultFiltered03 = competitorsResult.filter((competitor) => competitor.pool_number == "0-3");
+                const competitorsResultFiltered01 = competitorsResult.filter((competitor) => competitor.pool_number == "0-1");
+                const competitorsResultFiltered0 = competitorsResult.filter((competitor) => competitor.pool_number == "0");
+
+                const comptop : Competitor[] = [];
+                if (competitorsResultFiltered03.length >= 1 && competitorsResultFiltered01.length >= 2) {
+                    comptop.push(competitorsResultFiltered01[0]);
+                    comptop.push(competitorsResultFiltered01[1]);
+                    comptop.push(competitorsResultFiltered03[0]);
+                } else if (competitorsResultFiltered01.length >= 3) {
+                    comptop.push(competitorsResultFiltered01[0]);
+                    comptop.push(competitorsResultFiltered01[1]);
+                    comptop.push(competitorsResultFiltered01[2]);
+                } else if (competitorsResultFiltered0.length >= 3) {
+                    comptop.push(competitorsResultFiltered0[0]);
+                    comptop.push(competitorsResultFiltered0[1]);
+                    comptop.push(competitorsResultFiltered0[2]);
+                } else {
+                    return ctx.text("Not enough results to determine podium", 404);
                 }
-    
-    
+
+                // Vérification finale pour éviter accès hors tableau
+                if (comptop.length < 3 || !comptop[0] || !comptop[1] || !comptop[2]) {
+                    return ctx.text("Not enough results to determine podium", 404);
+                }
+
                 const ranking = {
                     first: comptop[0].id,
                     second: comptop[1].id,
                     third: comptop[2].id,
                 }
-                
+
                 return ctx.json(ranking, 200)
-            }else  {
+            } else  {
                 return ctx.text("No ranking in this category", 404)
             }
-
-
-            return ctx.text("No matches in this category", 404);
-            
-            
-
         })
         .openapi(TournamentsRoutes.getBracket, async (ctx) => {
             const { id } = ctx.req.valid('param');
@@ -810,6 +775,24 @@ export function buildTournamentsRouter() {
                 return ctx.text("No competitor without category", 404);
             }
             return ctx.json(competitors, 200)
+        })
+        .openapi(TournamentsRoutes.getCategory, async (ctx) => {
+            const { id } = ctx.req.valid('param')
+            const em = ctx.get("em")
+            const category = await em.findOne(Category, { id }, { populate: ['competitors'] })
+            if (category == null) {
+                return ctx.text("Not found", 404);
+            }
+
+            return ctx.json({
+                id: category.id,
+                name: category.name,
+                rank: category.rank,
+                elimination_type: category.elimination_type,
+                gender: category.gender,
+                weight_category: category.weight_category?.id,
+                age_group: category.age_group?.id
+            }, 200)
         })
 
 }
