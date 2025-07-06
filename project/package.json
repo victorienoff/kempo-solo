@@ -27,6 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "./build-cloudflare.sh",
+    "build:simple": "BUILD_PATH=build GENERATE_SOURCEMAP=false DISABLE_ESM=true react-scripts build",
     "build:original": "SKIP_PREFLIGHT_CHECK=true NODE_OPTIONS='--openssl-legacy-provider' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
