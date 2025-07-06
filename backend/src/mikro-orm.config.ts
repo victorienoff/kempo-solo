@@ -8,13 +8,21 @@ import { SeedManager } from '@mikro-orm/seeder';
 export default defineConfig({
   dynamicImportProvider: id => import(id),
   // Configuration pour MySQL (Railway)
-  clientUrl: process.env.DATABASE_URL,
-  // Fallback pour développement local avec MySQL
-  dbName: process.env.DB_NAME || 'kempo_db_solo',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '3306'),
+  ...(process.env.MYSQL_URL 
+    ? { 
+        clientUrl: process.env.MYSQL_URL,
+        debug: process.env.NODE_ENV !== 'production'
+      }
+    : {
+        // Fallback pour développement local avec MySQL
+        dbName: process.env.DB_NAME || 'kempo_db_solo',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        host: process.env.DB_HOST || 'localhost',
+        port: parseInt(process.env.DB_PORT || '3306'),
+        debug: true
+      }
+  ),
   entities: ['./src/entities/*.js '],
   entitiesTs: ['./src/entities/*.ts'],
   allowGlobalContext: true,
