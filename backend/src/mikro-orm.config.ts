@@ -1,13 +1,13 @@
 // mikro-orm.config.ts
 import { MikroORM } from '@mikro-orm/core';
-import { defineConfig } from '@mikro-orm/postgresql';
+import { defineConfig } from '@mikro-orm/mysql';
 import { Tournament } from './entities/Tournament.entity.ts';
 import { Migrator } from '@mikro-orm/migrations';
 import { SeedManager } from '@mikro-orm/seeder';
 
 export default defineConfig({
   dynamicImportProvider: id => import(id),
-  // Configuration pour PostgreSQL (Railway)
+  // Configuration pour MySQL (Railway)
   clientUrl: process.env.DATABASE_URL,
   // Fallback pour développement local avec MySQL
   dbName: process.env.DB_NAME || 'kempo_db_solo',
