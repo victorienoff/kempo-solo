@@ -7,10 +7,20 @@ import { SeedManager } from '@mikro-orm/seeder';
 
 export default defineConfig({
   dynamicImportProvider: id => import(id),
-  // Configuration pour MySQL (Railway)
-  ...(process.env.MYSQL_URL 
+  // Configuration pour MySQL (Railway) - essaie plusieurs variables
+  ...(process.env.MYSQL_URL || process.env.DATABASE_URL
     ? { 
-        clientUrl: process.env.MYSQL_URL,
+        clientUrl: process.env.MYSQL_URL || process.env.DATABASE_URL,
+        debug: process.env.NODE_ENV !== 'production'
+      }
+    : process.env.MYSQL_HOST
+    ? {
+        // Variables séparées Railway MySQL
+        host: process.env.MYSQL_HOST,
+        port: parseInt(process.env.MYSQL_PORT || '3306'),
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        dbName: process.env.MYSQL_DATABASE,
         debug: process.env.NODE_ENV !== 'production'
       }
     : {

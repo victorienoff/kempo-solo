@@ -6,6 +6,7 @@
     "watch": "pnpm cli --watch --",
     "dev": "pnpm watch src/main.ts",
     "start": "node --no-warnings=ExperimentalWarning --experimental-strip-types --experimental-transform-types src/main.ts",
+    "start:prod": "NODE_ENV=production node --no-warnings=ExperimentalWarning --experimental-strip-types --experimental-transform-types src/main.ts",
     "build": "echo 'No build step needed - using TypeScript strip-types'",
     "migrate": "npx mikro-orm migration:up",
     "migrate:create": "npx mikro-orm migration:create",

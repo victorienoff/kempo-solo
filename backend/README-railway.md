@@ -11,9 +11,10 @@
 1. **Créer un compte Railway** et se connecter avec GitHub
 2. **Nouveau projet** → **Deploy from GitHub repo**
 3. **Sélectionner** ce repository
-4. **Ajouter une base de données PostgreSQL** :
+4. **⚠️ IMPORTANT - Ajouter une base de données MySQL** :
    - Dans le dashboard Railway
-   - Cliquer sur "New" → "Database" → "PostgreSQL"
+   - Cliquer sur "New" → "Database" → "Add MySQL"
+   - Railway génère automatiquement la variable `MYSQL_URL`
 5. **Configurer les variables d'environnement** :
    ```
    NODE_ENV=production
@@ -25,7 +26,7 @@
 ### 3. Configuration automatique
 
 Railway configure automatiquement :
-- ✅ Variables de base de données PostgreSQL
+- ✅ Variables de base de données MySQL (`MYSQL_URL`)
 - ✅ Port d'écoute ($PORT)
 - ✅ SSL/HTTPS automatique
 - ✅ Build et déploiement depuis GitHub
