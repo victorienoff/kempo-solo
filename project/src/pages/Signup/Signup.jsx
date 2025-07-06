@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Signup.module.css";
 import { useNavigate } from "react-router-dom";
 import AuthButtons from "../../components/AuthButtons";
+import { API_CONFIG } from "../../config/api";
 
 const countries = [
   "France", "Belgique", "Suisse", "Canada", "Luxembourg", "Algérie", "Maroc", "Tunisie", "Espagne", "Italie", "Allemagne", "Royaume-Uni", "États-Unis", "Portugal", "Pays-Bas", "Chine", "Japon", "Brésil", "Argentine", "Australie", "Inde", "Russie", "Turquie", "Grèce", "Pologne", "Suède", "Norvège", "Danemark", "Finlande", "Islande", "Irlande", "Autriche", "Hongrie", "Roumanie", "Bulgarie", "Croatie", "Serbie", "Slovaquie", "Slovénie", "Tchéquie", "Ukraine", "Lituanie", "Lettonie", "Estonie", "Chypre", "Malte", "Israël", "Égypte", "Afrique du Sud", "Mexique", "Colombie", "Chili", "Pérou", "Venezuela", "Corée du Sud", "Thaïlande", "Vietnam", "Indonésie", "Malaisie", "Singapour", "Nouvelle-Zélande", "Philippines", "Arabie Saoudite", "Émirats Arabes Unis", "Qatar", "Koweït", "Liban", "Pakistan", "Bangladesh", "Sri Lanka", "Cambodge", "Laos", "Birmanie", "Mongolie", "Kazakhstan", "Ouzbékistan", "Turkménistan", "Géorgie", "Arménie", "Azerbaïdjan", "Irak", "Iran", "Syrie", "Jordanie", "Yémen", "Oman", "Bahreïn", "Koweït", "Afghanistan", "Tadjikistan", "Kirghizistan", "Palestine", "Soudan", "Éthiopie", "Kenya", "Tanzanie", "Ouganda", "Rwanda", "Burundi", "Mozambique", "Angola", "Zimbabwe", "Botswana", "Namibie", "Zambie", "Ghana", "Nigéria", "Cameroun", "Sénégal", "Mali", "Burkina Faso", "Niger", "Tchad", "Côte d'Ivoire", "Guinée", "Bénin", "Togo", "Sierra Leone", "Libéria", "Gambie", "Cap-Vert", "Mauritanie", "Guinée-Bissau", "Congo", "RDC", "Gabon", "Congo-Brazzaville", "Centrafrique", "Guinée équatoriale", "Sao Tomé-et-Principe", "Madagascar", "Comores", "Seychelles", "Maurice", "Swaziland", "Lesotho", "Libye", "Maroc", "Algérie", "Tunisie", "Soudan du Sud"
@@ -26,7 +27,7 @@ function Signup() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/ranks")
+    fetch(API_CONFIG.ENDPOINTS.RANKS)
       .then((res) => res.json())
       .then((data) => setRanks(data))
       .catch(() => setRanks([]));

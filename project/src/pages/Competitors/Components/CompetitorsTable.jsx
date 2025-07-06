@@ -3,6 +3,7 @@ import axios from "axios";
 import styles from "./CompetitorsTable.module.css";
 import Filter from "./Filter";
 import EditCompetitors from "./EditCompetitors";
+import { API_CONFIG } from "../../../config/api";
 
 const CompetitorTable = (props) => {
   const [competitors, setCompetitors] = useState([]);
@@ -17,7 +18,7 @@ const CompetitorTable = (props) => {
   const fetchCompetitors = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:3000/api/competitors", {
+      const res = await axios.get(API_CONFIG.ENDPOINTS.COMPETITORS, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
           "Content-Type": "application/json"
@@ -32,7 +33,7 @@ const CompetitorTable = (props) => {
   useEffect(() => {
     fetchCompetitors();
     // Fetch ranks from API
-    axios.get("http://localhost:3000/api/ranks")
+    axios.get(API_CONFIG.ENDPOINTS.RANKS)
       .then(res => setRanks(res.data))
       .catch(() => setRanks([]));
   }, []);
@@ -53,7 +54,7 @@ const CompetitorTable = (props) => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/api/competitors/${competitorId}`, {
+      await axios.delete(`${API_CONFIG.ENDPOINTS.COMPETITORS}/${competitorId}`, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
           "Content-Type": "application/json"

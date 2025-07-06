@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styles from "./AddCompetitors.module.css";
+import { apiUrl } from "../../../config/api";
 
 const AddCompetitorModal = ({ isOpen, onClose, onAdd }) => {
   const [form, setForm] = useState({
@@ -31,7 +32,7 @@ const AddCompetitorModal = ({ isOpen, onClose, onAdd }) => {
         gender: form.sex === "Homme" ? "H" : "F"
       };
 
-      const response = await axios.post("http://localhost:3000/competitors", payload);
+      const response = await axios.post(apiUrl("/competitors"), payload);
 
       // Update the local UI
       onAdd({
