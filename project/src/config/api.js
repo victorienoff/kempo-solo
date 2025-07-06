@@ -1,7 +1,7 @@
 // Configuration de l'API
-const API_BASE_URL = process.env.REACT_APP_API_URL || 
-  (process.env.NODE_ENV === 'production' 
-    ? 'https://kempo-backend-production.up.railway.app' // Remplacez par votre vraie URL Railway
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.MODE === 'production' 
+    ? 'https://kempo-solo-production.up.railway.app' // URL Railway réelle
     : 'http://localhost:3000'
   );
 
@@ -24,6 +24,6 @@ export const apiUrl = (path) => {
 
 console.log('🔗 API Configuration:', {
   BASE_URL: API_BASE_URL,
-  NODE_ENV: process.env.NODE_ENV,
-  REACT_APP_API_URL: process.env.REACT_APP_API_URL
+  MODE: import.meta.env.MODE,
+  VITE_API_URL: import.meta.env.VITE_API_URL
 });
