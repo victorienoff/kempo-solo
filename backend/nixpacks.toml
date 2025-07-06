@@ -1,0 +1,14 @@
+# Fichier Nixpacks pour Railway
+# Configure pnpm et Node.js 22
+
+[phases.setup]
+pkgs = ["nodejs_22", "pnpm"]
+
+[phases.install]
+cmds = ["pnpm install --frozen-lockfile"]
+
+[phases.build] 
+cmds = ["pnpm run build"]
+
+[start]
+cmd = "pnpm start"

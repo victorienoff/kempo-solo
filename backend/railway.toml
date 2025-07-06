@@ -1,0 +1,12 @@
+# Railway Deployment Config
+# Utilise pnpm comme gestionnaire de packages
+[build]
+  builder = "nixpacks"
+
+[deploy]
+  startCommand = "pnpm start"
+  restartPolicyType = "never"
+
+[env]
+  PNPM_VERSION = "9.15.0"
+  NODE_VERSION = "22"
