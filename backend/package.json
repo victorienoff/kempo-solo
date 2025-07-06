@@ -5,6 +5,11 @@
     "cli": "node --no-warnings=ExperimentalWarning --experimental-strip-types --experimental-transform-types",
     "watch": "pnpm cli --watch --",
     "dev": "pnpm watch src/main.ts",
+    "start": "node --no-warnings=ExperimentalWarning --experimental-strip-types --experimental-transform-types src/main.ts",
+    "build": "echo 'No build step needed - using TypeScript strip-types'",
+    "migrate": "npx mikro-orm migration:up",
+    "migrate:create": "npx mikro-orm migration:create",
+    "seed": "npx mikro-orm seeder:run",
     "test": "pnpm vitest"
   },
   "dependencies": {
@@ -14,6 +19,7 @@
     "@mikro-orm/core": "^6.4.11",
     "@mikro-orm/migrations": "^6.4.11",
     "@mikro-orm/mysql": "^6.4.11",
+    "@mikro-orm/postgresql": "^6.4.11",
     "@mikro-orm/seeder": "^6.4.11",
     "@scalar/hono-api-reference": "^0.7.4",
     "bcryptjs": "^3.0.2",

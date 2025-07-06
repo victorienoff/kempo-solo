@@ -1,0 +1,81 @@
+# 🚂 Déploiement Kempo Solo Backend sur Railway
+
+## ⚡ Guide de déploiement rapide
+
+### 1. Prérequis
+- Compte GitHub avec ce repository
+- Compte Railway (gratuit) : https://railway.app
+
+### 2. Déploiement sur Railway
+
+1. **Créer un compte Railway** et se connecter avec GitHub
+2. **Nouveau projet** → **Deploy from GitHub repo**
+3. **Sélectionner** ce repository
+4. **Ajouter une base de données PostgreSQL** :
+   - Dans le dashboard Railway
+   - Cliquer sur "New" → "Database" → "PostgreSQL"
+5. **Configurer les variables d'environnement** :
+   ```
+   NODE_ENV=production
+   JWT_SECRET=your-super-secret-jwt-key
+   CORS_ORIGIN=https://kempo-solo.pages.dev
+   ```
+6. **Déployer** ! Railway détecte automatiquement le Dockerfile
+
+### 3. Configuration automatique
+
+Railway configure automatiquement :
+- ✅ Variables de base de données PostgreSQL
+- ✅ Port d'écoute ($PORT)
+- ✅ SSL/HTTPS automatique
+- ✅ Build et déploiement depuis GitHub
+
+### 4. Migrations
+
+Après le premier déploiement :
+```bash
+# Railway CLI (optionnel)
+railway run pnpm migrate
+
+# Ou via le dashboard Railway > Variables > Add Command
+# Startup Command: pnpm migrate && pnpm start
+```
+
+### 5. URL de l'API
+
+Après déploiement, votre API sera disponible sur :
+```
+https://your-app-name-production.up.railway.app
+```
+
+## 🛠️ Développement local
+
+```bash
+# Installation
+cd backend
+pnpm install
+
+# Variables d'environnement
+cp .env.example .env
+# Éditer .env avec vos valeurs
+
+# Démarrage
+pnpm dev
+```
+
+## 📋 Stack technique
+
+- **Runtime** : Node.js 22 avec TypeScript strip-types
+- **Framework** : Hono
+- **ORM** : MikroORM
+- **Base de données** : PostgreSQL (production) / MySQL (local)
+- **Package manager** : pnpm
+- **Déploiement** : Railway
+
+## 🔄 CI/CD
+
+Chaque push sur la branche `main` redéploie automatiquement l'application.
+
+## 🐛 Debug
+
+Logs en temps réel disponibles dans le dashboard Railway.
