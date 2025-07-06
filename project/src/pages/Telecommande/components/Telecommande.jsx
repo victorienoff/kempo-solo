@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Telecommande.module.css";
+import { apiUrl } from "../../../config/api";
 
 // Chargement initial synchrone des données du localStorage AVANT le rendu (pour éviter le flash des valeurs par défaut)
 const getInitialCompetitor = (key, fallback) => {
@@ -188,7 +189,7 @@ const Telecommande = () => {
           keikuka1: faults1,
           keikuka2: faults2,
         };
-        await fetch(`http://localhost:3000/api/matches/${matchId}`,
+        await fetch(apiUrl(`/api/matches/${matchId}`),
           {
             method: 'POST',
             headers: {

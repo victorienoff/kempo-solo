@@ -4,6 +4,7 @@ import styles from "./TournamentTable.module.css";
 import Filters from "./Filters";
 import EditTournoiModal from "./EditTournamentModal";
 import { jwtDecode } from "jwt-decode";
+import { API_CONFIG, apiUrl } from "../../../config/api";
 
 const TournoiTable = () => {
   const [searchQueryName, setSearchQueryName] = useState("");
@@ -22,7 +23,7 @@ const TournoiTable = () => {
   const fetchTournaments = () => {
     const token = localStorage.getItem("token");
     console.log("Token envoyé:", token);
-    fetch("http://localhost:3000/api/tournaments", {
+    fetch(API_CONFIG.ENDPOINTS.TOURNAMENTS, {
       headers: {
         "Authorization": token ? `Bearer ${token}` : "",
         "Content-Type": "application/json"
@@ -61,7 +62,7 @@ const TournoiTable = () => {
     fetchTournaments();
     // Récupérer les tournois auxquels l'utilisateur est inscrit
     if (token) {
-      fetch("http://localhost:3000/api/tournaments/me", {
+      fetch(apiUrl("/api/tournaments/me"), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -86,7 +87,7 @@ const TournoiTable = () => {
     if (!confirm) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/tournaments/${id}`, {
+      const response = await fetch(apiUrl(`/tournaments/${id}`), {
         method: "DELETE",
       });
 
@@ -112,7 +113,7 @@ const TournoiTable = () => {
     if (!confirm) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/add-competitor/${userId}`, {
+      const response = await fetch(apiUrl(`/api/tournaments/${tournamentId}/add-competitor/${userId}`), {
         method: "POST",
         headers: {
           "Authorization": token ? `Bearer ${token}` : "",
@@ -147,7 +148,7 @@ const TournoiTable = () => {
     if (!confirm) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/delete-competitor/${userId}`, {
+      const response = await fetch(apiUrl(`/api/tournaments/${tournamentId}/delete-competitor/${userId}`), {
         method: "DELETE",
         headers: {
           "Authorization": token ? `Bearer ${token}` : "",
@@ -157,7 +158,7 @@ const TournoiTable = () => {
       if (response.ok) {
         alert("Désinscription réussie !");
         // Mettre à jour la liste des inscriptions
-        fetch("http://localhost:3000/api/tournaments/me", {
+        fetch(apiUrl("/api/tournaments/me"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -181,7 +182,7 @@ const TournoiTable = () => {
     if (!confirm) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/start`, {
+      const response = await fetch(apiUrl(`/api/tournaments/${tournamentId}/start`), {
         method: "POST",
         headers: {
           "Authorization": token ? `Bearer ${token}` : "",

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./CreateTournament.module.css";
+import { API_CONFIG } from "../../../config/api";
 
 const CreationTournoi = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +39,7 @@ const CreationTournoi = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/api/tournaments", {
+      const response = await fetch(API_CONFIG.ENDPOINTS.TOURNAMENTS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
