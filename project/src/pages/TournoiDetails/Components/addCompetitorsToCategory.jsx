@@ -3,6 +3,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./addCompetitorToCateg.module.css";
 import AssignedCompetitors from "./AssignedCompetitors";
+import { apiUrl } from '../../../../config/api';
 
 const AddCompetitorsToCategory = () => {
   const location = useLocation();
@@ -27,7 +28,7 @@ const AddCompetitorsToCategory = () => {
   const fetchCompetitors = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/tournaments/${tournamentId}/competitor-without-category`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/competitor-without-category`,
         getAxiosConfig()
       );
       setCompetitors(res.data);
@@ -51,7 +52,7 @@ const AddCompetitorsToCategory = () => {
     try {
 
       await axios.post(
-        `http://localhost:3000/api/tournaments/${tournamentId}/assign-competitor/${categoryId}`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/assign-competitor/${categoryId}`,
         { competitor_id: competitorId },
         getAxiosConfig()
       );
@@ -67,7 +68,7 @@ const AddCompetitorsToCategory = () => {
   const handleStartTournament = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/tournaments/${tournamentId}/start`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/start`,
         {},
         getAxiosConfig()
       );

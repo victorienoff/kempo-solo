@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddCategoryModal from "./Components/AddCategoryModal";
 import styles from "./TournoiDetails.module.css";
+import { apiUrl } from '../../../config/api';
 
 const TournoiDetails = () => {
   const { id: tournamentId } = useParams();
@@ -24,7 +25,7 @@ const TournoiDetails = () => {
         }
       };
       const res = await axios.get(
-        `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/categories`,
         axiosConfig
       );
       setCategories(res.data);
@@ -39,7 +40,7 @@ const TournoiDetails = () => {
       await Promise.all(res.data.map(async (cat) => {
         try {
           const resp = await axios.get(
-            `http://localhost:3000/api/tournaments/categories/${cat.id}/competitors`,
+            apiUrl(`/api/tournaments/categories/${cat.id}/competitors`),
             axiosConfig
           );
           counts[cat.id] = Array.isArray(resp.data) ? resp.data.length : 0;
@@ -52,7 +53,7 @@ const TournoiDetails = () => {
       const ageGroupMap = {};
       await Promise.all(Array.from(ageGroupIds).map(async (id) => {
         try {
-          const resp = await axios.get(`http://localhost:3000/api/age-groups/${id}`, axiosConfig);
+          const resp = await axios.get(`${apiUrl("/api/age-groups/")}${id}`, axiosConfig);
           ageGroupMap[id] = resp.data?.name ? resp.data : null;
         } catch {
           ageGroupMap[id] = null;
@@ -63,7 +64,7 @@ const TournoiDetails = () => {
       const weightCategoryMap = {};
       await Promise.all(Array.from(weightCategoryIds).map(async (id) => {
         try {
-          const resp = await axios.get(`http://localhost:3000/api/weight-categories/${id}`, axiosConfig);
+          const resp = await axios.get(apiUrl(`/api/weight-categories/${id}`), axiosConfig);
           // L'API retourne un tableau
           weightCategoryMap[id] = Array.isArray(resp.data) ? resp.data[0] : resp.data;
         } catch {
@@ -101,7 +102,7 @@ const TournoiDetails = () => {
       };
 
       await axios.post(
-        `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/categories`,
         payload,
         axiosConfig
       );
@@ -137,7 +138,7 @@ const TournoiDetails = () => {
         }
       };
       await axios.post(
-        `http://localhost:3000/api/tournaments/${tournamentId}/categories`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/categories`,
         testPayload,
         axiosConfig
       );
@@ -159,7 +160,7 @@ const TournoiDetails = () => {
           "Content-Type": "application/json"
         }
       };
-      await axios.delete(`http://localhost:3000/api/tournaments/categories/${categoryId}`, axiosConfig);
+      await axios.delete(apiUrl(`/api/tournaments/categories/${categoryId}`), axiosConfig);
       alert("Catégorie supprimée");
       fetchCategories();
     } catch (err) {
@@ -178,7 +179,7 @@ const TournoiDetails = () => {
         }
       };
       await axios.post(
-        `http://localhost:3000/api/tournaments/${tournamentId}/start`,
+        `${apiUrl("/api/tournaments/")}${tournamentId}/start`,
         {},
         axiosConfig
       );

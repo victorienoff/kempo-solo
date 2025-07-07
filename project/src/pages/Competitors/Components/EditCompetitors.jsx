@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./EditCompetitors.module.css";
 import axios from "axios";
+import { apiUrl } from '../../../../config/api';
 
 const EditCompetitors = ({ isOpen, onClose, competitor, onSave }) => {
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ const EditCompetitors = ({ isOpen, onClose, competitor, onSave }) => {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:3000/api/competitors/${competitor.id}`, formData, {
+      await axios.put(`${apiUrl("/api/competitors/")}${competitor.id}`, formData, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
           "Content-Type": "application/json"

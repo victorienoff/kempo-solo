@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./EditTournamentModal.module.css"; // reuse the same styles
+import { apiUrl } from '../../../../config/api';
 
 const EditTournoiModal = ({ isOpen, onClose, tournament, onUpdate }) => {
   const [name, setName] = useState("");
@@ -33,7 +34,7 @@ const EditTournoiModal = ({ isOpen, onClose, tournament, onUpdate }) => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/tournaments/${tournament.id}`, {
+      const response = await fetch(apiUrl(`/tournaments/${tournament.id}`), {
         method: "PUT", // or PATCH depending on your backend
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),

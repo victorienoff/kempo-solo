@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthButtons from "../../components/AuthButtons";
 import styles from "./Profile.module.css";
+import { apiUrl } from '../../../config/api';
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -22,7 +23,7 @@ function Profile() {
       setLoading(false);
       return;
     }
-    fetch("http://localhost:3000/api/competitors/me", {
+    fetch(apiUrl("/api/competitors/me"), {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -43,14 +44,14 @@ function Profile() {
       });
 
     // Récupération des ranks
-    fetch("http://localhost:3000/api/ranks")
+    fetch(apiUrl("/api/ranks"))
       .then((res) => res.json())
       .then((data) => setRanks(data))
       .catch(() => setRanks([]));
 
     // Récupération des tournois auxquels je participe
     if (token) {
-      fetch("http://localhost:3000/api/tournaments/me", {
+      fetch(apiUrl("/api/tournaments/me"), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -69,7 +70,7 @@ function Profile() {
    const handleValidate = async () => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:3000/api/competitors/${user.id}`, {
+      await fetch(`${apiUrl("/api/competitors/")}${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +99,7 @@ function Profile() {
     if (!confirm) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/delete-competitor/${user.id}`, {
+      const response = await fetch(`${apiUrl("/api/tournaments/")}${tournamentId}/delete-competitor/${user.id}`, {
         method: "DELETE",
         headers: {
           "Authorization": token ? `Bearer ${token}` : "",
@@ -108,7 +109,7 @@ function Profile() {
       if (response.ok) {
         alert("Désinscription réussie !");
         // Rafraîchir la liste des tournois
-        fetch("http://localhost:3000/api/tournaments/me", {
+        fetch(apiUrl("/api/tournaments/me"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

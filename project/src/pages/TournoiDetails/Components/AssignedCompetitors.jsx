@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import styles from "./AssignedCompetitors.module.css";
+import { apiUrl } from '../../../../config/api';
 
 const AssignedCompetitors = () => {
   const { id: tournamentId } = useParams();
@@ -20,7 +21,7 @@ const AssignedCompetitors = () => {
         }
       };
       const res = await axios.get(
-        `http://localhost:3000/api/tournaments/categories/${categoryId}/competitors`,
+        apiUrl(`/api/tournaments/categories/${categoryId}/competitors`),
         axiosConfig
       );
       setAssignedCompetitors(res.data);
@@ -40,7 +41,7 @@ const AssignedCompetitors = () => {
         }
       };
       await axios.delete(
-        `http://localhost:3000/api/tournaments/categories/${categoryId}/delete-competitor/${competitorId}`,
+        apiUrl(`/api/tournaments/categories/${categoryId}/delete-competitor/${competitorId}`),
         axiosConfig
       );
       alert("✅ Compétiteur supprimé !");

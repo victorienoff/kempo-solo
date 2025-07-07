@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthButtons from "../../components/AuthButtons";
 import styles from "./Login.module.css";
+import { apiUrl } from "../../config/api";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ function Login() {
     }
     setError("");
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(apiUrl("/login"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +88,7 @@ function Login() {
             }
             setError("");
             try {
-              const response = await fetch(`http://localhost:3000/send/${encodeURIComponent(email)}`, {
+              const response = await fetch(apiUrl(`/send/${encodeURIComponent(email)}`), {
                 method: "POST"
               });
               const data = await response.json();

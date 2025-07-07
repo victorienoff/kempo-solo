@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./MatchesTable.module.css";
 import RankingTable from "../../TournoiDetails/Components/RankingTable";
+import { apiUrl } from '../../../../config/api';
 
 const MatchTablePoule = () => {
   const { categoryId } = useParams();
@@ -25,7 +26,7 @@ const MatchTablePoule = () => {
             "Content-Type": "application/json"
           }
         };
-        const res = await axios.get(`http://localhost:3000/api/tournaments/categories/${categoryId}/matches`, axiosConfig);
+        const res = await axios.get(apiUrl(`/api/tournaments/categories/${categoryId}/matches`), axiosConfig);
         // Grouper les matchs par pool_number
         const grouped = {};
         const compMap = {};
@@ -86,7 +87,7 @@ const MatchTablePoule = () => {
       const token = localStorage.getItem("token");
       axios
         .get(
-          `http://localhost:3000/api/tournaments/categories/${categoryId}/results`,
+          apiUrl(`/api/tournaments/categories/${categoryId}/results`),
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -109,7 +110,7 @@ const MatchTablePoule = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:3000/api/tournaments/categories/${categoryId}/start-ranking-pool`,
+        apiUrl(`/api/tournaments/categories/${categoryId}/start-ranking-pool`),
         {},
         {
           headers: {
@@ -128,7 +129,7 @@ const MatchTablePoule = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.get(
-        `http://localhost:3000/api/tournaments/categories/${categoryId}/results`,
+        apiUrl(`/api/tournaments/categories/${categoryId}/results`),
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
@@ -147,7 +148,7 @@ const MatchTablePoule = () => {
     if (!id || competitors[id]) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`http://localhost:3000/api/competitors/${id}`, {
+      const res = await axios.get(`${apiUrl("/api/competitors/")}${id}`, {
         headers: { Authorization: token ? `Bearer ${token}` : "" }
       });
       if (res.data && res.data.firstname && res.data.lastname) {
@@ -214,7 +215,7 @@ const MatchTablePoule = () => {
       };
       console.log('POST /api/matches/' + match.id, body);
       await axios.post(
-        `http://localhost:3000/api/matches/${match.id}`,
+        `${apiUrl("/api/matches/")}${match.id}`,
         body,
         {
           headers: {
@@ -228,7 +229,7 @@ const MatchTablePoule = () => {
       setOpenFormMatchId(null);
       setFormData({ score1: '', score2: '', keikuka1: '', keikuka2: '', winner: '' });
       // Refetch
-      const res = await axios.get(`http://localhost:3000/api/tournaments/categories/${categoryId}/matches`, {
+      const res = await axios.get(apiUrl(`/api/tournaments/categories/${categoryId}/matches`), {
         headers: { Authorization: token ? `Bearer ${token}` : "" }
       });
       const grouped = {};

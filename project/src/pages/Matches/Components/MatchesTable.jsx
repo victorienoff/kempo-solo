@@ -5,6 +5,7 @@ import MatchTablePoule from "./MatchTablePoule";
 import MatchTableDirect from "./MatchTableDirect";
 import styles from "./MatchesTable.module.css";
 import { SingleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
+import { apiUrl } from '../../../../config/api';
 
 // Nouvelle fonction pour transformer les matches en format compatible avec @g-loot/react-tournament-brackets
 function buildBracketMatches(matches, competitors) {
@@ -98,7 +99,7 @@ const MatchesTable = () => {
           "Content-Type": "application/json"
         }
       };
-      const res = await axios.get(`http://localhost:3000/api/competitors/${id}`, axiosConfig);
+      const res = await axios.get(`${apiUrl("/api/competitors/")}${id}`, axiosConfig);
       const name = `${res.data.firstname} ${res.data.lastname}`;
       setCompetitors((prev) => ({ ...prev, [id]: name }));
       return name;
@@ -117,7 +118,7 @@ const MatchesTable = () => {
             'Content-Type': 'application/json',
           },
         };
-        const res = await axios.get(`http://localhost:3000/api/tournaments/categories/${categoryId}`, axiosConfig);
+        const res = await axios.get(apiUrl(`/api/tournaments/categories/${categoryId}`), axiosConfig);
         setEliminationType(res.data.elimination_type);
       } catch (err) {
         setEliminationType(null);
@@ -137,7 +138,7 @@ const MatchesTable = () => {
           }
         };
         const res = await axios.get(
-          `http://localhost:3000/api/tournaments/categories/${categoryId}/bracket`,
+          apiUrl(`/api/tournaments/categories/${categoryId}/bracket`),
           axiosConfig
         );
         const roundNames = Object.keys(res.data).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
@@ -172,7 +173,7 @@ const MatchesTable = () => {
         uniqueIds.forEach(async (id) => {
           if (!compMap[id]) {
             try {
-              const res = await axios.get(`http://localhost:3000/api/competitors/${id}`, axiosConfig);
+              const res = await axios.get(`${apiUrl("/api/competitors/")}${id}`, axiosConfig);
               if (res.data && res.data.firstname && res.data.lastname) {
                 setCompetitors(prev => ({ ...prev, [id]: `${res.data.firstname} ${res.data.lastname}` }));
               }
@@ -219,7 +220,7 @@ const MatchesTable = () => {
             "Content-Type": "application/json"
           }
         };
-        const res = await axios.get(`http://localhost:3000/api/competitors/${id}`, axiosConfig);
+        const res = await axios.get(`${apiUrl("/api/competitors/")}${id}`, axiosConfig);
         return {
           name: `${res.data.firstname} ${res.data.lastname}`,
           club: res.data.club || ''
@@ -276,7 +277,7 @@ const MatchesTable = () => {
         keikuka2: formData.keikuka2 !== '' && formData.keikuka2 !== undefined && formData.keikuka2 !== null ? parseInt(formData.keikuka2) : 0,
       };
       await axios.post(
-        `http://localhost:3000/api/matches/${match.id}`,
+        `${apiUrl("/api/matches/")}${match.id}`,
         body,
         {
           headers: {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AddCategoryModal.module.css";
 import axios from "axios";
+import { apiUrl } from '../../../../config/api';
 
 const gradesList = [
   "Ceinture Blanche", "Ceinture Jaune", "Ceinture Orange", "Ceinture Verte",
@@ -29,8 +30,8 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
           }
         };
         const [weights, ages] = await Promise.all([
-          axios.get("http://localhost:3000/api/weight-categories", axiosConfig),
-          axios.get("http://localhost:3000/api/age-groups", axiosConfig)
+          axios.get(apiUrl("/api/weight-categories"), axiosConfig),
+          axios.get(apiUrl("/api/age-groups"), axiosConfig)
         ]);
         setWeightCategories(weights.data);
         setAgeGroups(ages.data);
