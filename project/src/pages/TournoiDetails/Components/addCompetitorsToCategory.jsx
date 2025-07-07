@@ -3,7 +3,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./addCompetitorToCateg.module.css";
 import AssignedCompetitors from "./AssignedCompetitors";
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 const AddCompetitorsToCategory = () => {
   const location = useLocation();

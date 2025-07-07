@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthButtons from "../../components/AuthButtons";
 import styles from "./Profile.module.css";
-import { apiUrl } from '../../../config/api';
+import { apiUrl } from '../../config/api';
 
 function Profile() {
   const [user, setUser] = useState(null);

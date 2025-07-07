@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./MatchesTable.module.css";
 import RankingTable from "../../TournoiDetails/Components/RankingTable";
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 const MatchTablePoule = () => {
   const { categoryId } = useParams();

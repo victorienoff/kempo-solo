@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AddCategoryModal.module.css";
 import axios from "axios";
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 const gradesList = [
   "Ceinture Blanche", "Ceinture Jaune", "Ceinture Orange", "Ceinture Verte",

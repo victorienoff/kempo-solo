@@ -5,7 +5,7 @@ import MatchTablePoule from "./MatchTablePoule";
 import MatchTableDirect from "./MatchTableDirect";
 import styles from "./MatchesTable.module.css";
 import { SingleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 // Nouvelle fonction pour transformer les matches en format compatible avec @g-loot/react-tournament-brackets
 function buildBracketMatches(matches, competitors) {

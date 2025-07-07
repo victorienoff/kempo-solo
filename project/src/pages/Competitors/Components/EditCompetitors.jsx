@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./EditCompetitors.module.css";
 import axios from "axios";
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 const EditCompetitors = ({ isOpen, onClose, competitor, onSave }) => {
   const [formData, setFormData] = useState({

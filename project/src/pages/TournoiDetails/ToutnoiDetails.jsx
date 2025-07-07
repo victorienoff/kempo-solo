@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddCategoryModal from "./Components/AddCategoryModal";
 import styles from "./TournoiDetails.module.css";
-import { apiUrl } from '../../../config/api';
+import { apiUrl } from '../../config/api';
 
 const TournoiDetails = () => {
   const { id: tournamentId } = useParams();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./EditTournamentModal.module.css"; // reuse the same styles
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 const EditTournoiModal = ({ isOpen, onClose, tournament, onUpdate }) => {
   const [name, setName] = useState("");

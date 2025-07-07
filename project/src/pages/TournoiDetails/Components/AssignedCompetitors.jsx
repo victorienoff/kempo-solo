@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import styles from "./AssignedCompetitors.module.css";
-import { apiUrl } from '../../../../config/api';
+import { apiUrl } from '../../../config/api';
 
 const AssignedCompetitors = () => {
   const { id: tournamentId } = useParams();
