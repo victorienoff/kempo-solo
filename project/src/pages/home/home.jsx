@@ -4,7 +4,6 @@ const Home = () => (
   <div style={{ padding: '2rem', maxWidth: 900, margin: 'auto' }}>
     <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Bienvenue sur le Kempo</h1>
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
-      <img src={process.env.PUBLIC_URL + '/kempo-fight.jpeg'} alt="Kempo" style={{ width: 180, borderRadius: 16, boxShadow: '0 4px 16px #0002' }} />
       <div style={{ flex: 1, minWidth: 260 }}>
         <h2>Qu'est-ce que le Kempo ?</h2>
         <p>
